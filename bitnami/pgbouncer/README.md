@@ -15,24 +15,35 @@ docker run --name pgbouncer bitnami/pgbouncer:latest
 
 **Warning**: This quick setup is only intended for development environments. You are encouraged to change the insecure default credentials and check out the available configuration options in the [Configuration](#configuration) section for a more secure deployment.
 
-## Why use Bitnami Images?
+## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
 
-* Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
-* With Bitnami images the latest bug fixes and features are available as soon as possible.
-* Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [**minideb**](https://github.com/bitnami/minideb) -a minimalist Debian based container image that gives you a small base container image and the familiarity of a leading Linux distribution- or **scratch** -an explicitly empty image-.
-* All Bitnami images available in Docker Hub are signed with [Notation](https://notaryproject.dev/). [Check this post](https://blog.bitnami.com/2024/03/bitnami-packaged-containers-and-helm.html) to know how to verify the integrity of the images.
-* Bitnami container images are released on a regular basis with the latest distribution packages available.
+Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
 
-Looking to use PgBouncer in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+- Granting community users access for the first time to security-optimized versions of popular container images.
+- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
+## Why use Bitnami Secure Images?
+
+- Bitnami Secure Images and Helm charts are built to make open source more secure and enterprise ready.
+- Triage security vulnerabilities faster, with transparency into CVE risks using industry standard Vulnerability Exploitability Exchange (VEX), KEV, and EPSS scores.
+- Our hardened images use a minimal OS (Photon Linux), which reduces the attack surface while maintaining extensibility through the use of an industry standard package format.
+- Stay more secure and compliant with continuously built images updated within hours of upstream patches.
+- Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
+- Hardened images come with attestation signatures (Notation), SBOMs, virus scan reports and other metadata produced in an SLSA-3 compliant software factory.
+
+Only a subset of BSI applications are available for free. Looking to access the entire catalog of applications as well as enterprise support? Try the [commercial edition of Bitnami Secure Images today](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/).
 
 ## Why use a non-root container?
 
-Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-work-with-non-root-containers-index.html).
+Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-work-with-non-root-containers-index.html).
 
 ## Supported tags and respective `Dockerfile` links
 
-Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html).
+Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html).
 
 You can see the equivalence between the different tags by taking a look at the `tags-info.yaml` file present in the branch folder, i.e `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`.
 
@@ -76,6 +87,7 @@ docker build -t bitnami/APP:latest .
 | `PGBOUNCER_AUTH_QUERY`                | PgBouncer authentication query                                                                                                                                                             | `nil`                   |
 | `PGBOUNCER_AUTH_TYPE`                 | PgBouncer authentication type                                                                                                                                                              | `scram-sha-256`         |
 | `PGBOUNCER_AUTH_HBA_FILE`             | HBA configuration file to use                                                                                                                                                              | `nil`                   |
+| `PGBOUNCER_AUTH_IDENT_FILE`           | Ident map file to use                                                                                                                                                                      | `nil`                   |
 | `PGBOUNCER_STATS_USERS`               | PgBouncer comma-separated list of database users that are allowed to connect and run read-only queries.                                                                                    | `nil`                   |
 | `PGBOUNCER_POOL_MODE`                 | PgBouncer pool mode. Allowed values: session (default), transaction and statement.                                                                                                         | `nil`                   |
 | `PGBOUNCER_INIT_SLEEP_TIME`           | PgBouncer initialization sleep time                                                                                                                                                        | `10`                    |
@@ -172,7 +184,7 @@ docker run --name pgbouncer \
 
 ### Exposed database
 
-* `PGBOUNCER_DATABASE`: PgBouncer exposed database. Default: **postgres**.
+- `PGBOUNCER_DATABASE`: PgBouncer exposed database. Default: **postgres**.
 
 In case you'd like pgbouncer to expose your database with a different name, you can use the `PGBOUNCER_DATABASE` variable.
 To expose the same database name as the backend, set `PGBOUNCER_DATABASE="$POSTGRESQL_DATABASE"`.
@@ -203,18 +215,18 @@ pgbouncer:
 
 PgBouncer supports the encryption of connections using the SSL/TLS protocol. Should you desire to enable this optional feature, you may use the following environment variables to configure the application:
 
-* `PGBOUNCER_CLIENT_TLS_SSLMODE`: TLS traffic settings. Defaults to `disable`. Check the [official PgBouncer documentation](https://www.pgbouncer.org/config.html) for the available values for `client_tls_sslmode`.
-* `PGBOUNCER_CLIENT_TLS_CERT_FILE`: File containing the certificate file for the TLS traffic. No defaults.
-* `PGBOUNCER_CLIENT_TLS_KEY_FILE`: File containing the key for certificate. No defaults.
-* `PGBOUNCER_CLIENT_TLS_CA_FILE`: File containing the CA of the certificate. If provided, PgBouncer will authenticate TLS/SSL clients by requesting them a certificate . No defaults.
-* `PGBOUNCER_CLIENT_TLS_CIPHERS`: TLS ciphers to be used. Defaults to `fast`.Check the [official PgBouncer documentation](https://www.pgbouncer.org/config.html) for the available values for `client_tls_ciphers`.
+- `PGBOUNCER_CLIENT_TLS_SSLMODE`: TLS traffic settings. Defaults to `disable`. Check the [official PgBouncer documentation](https://www.pgbouncer.org/config.html) for the available values for `client_tls_sslmode`.
+- `PGBOUNCER_CLIENT_TLS_CERT_FILE`: File containing the certificate file for the TLS traffic. No defaults.
+- `PGBOUNCER_CLIENT_TLS_KEY_FILE`: File containing the key for certificate. No defaults.
+- `PGBOUNCER_CLIENT_TLS_CA_FILE`: File containing the CA of the certificate. If provided, PgBouncer will authenticate TLS/SSL clients by requesting them a certificate . No defaults.
+- `PGBOUNCER_CLIENT_TLS_CIPHERS`: TLS ciphers to be used. Defaults to `fast`.Check the [official PgBouncer documentation](https://www.pgbouncer.org/config.html) for the available values for `client_tls_ciphers`.
 
-* `PGBOUNCER_SERVER_TLS_SSLMODE`: Server TLS traffic settings. Defaults to `disable`. Check the [official PgBouncer documentation](https://www.pgbouncer.org/config.html) for the available values for `server_tls_sslmode`.
-* `PGBOUNCER_SERVER_TLS_KEY_FILE`: File containing the key to authenticate against PostgreSQL server. No defaults.
-* `PGBOUNCER_SERVER_TLS_CERT_FILE`: File containing the certificate associated to previous private key. PostgreSQL server can validate it. No defaults.
-* `PGBOUNCER_SERVER_TLS_CA_FILE`: File containing the CA of the server certificate. If provided, PgBouncer will authenticate TLS/SSL clients by requesting them a certificate . No defaults.
-* `PGBOUNCER_SERVER_TLS_PROTOCOLS`: TLS protocols to be used in server connection. Defaults to `secure`. Check the [official PgBouncer documentation](https://www.pgbouncer.org/config.html) for the available values for `server_tls_protocols`.
-* `PGBOUNCER_SERVER_TLS_CIPHERS`: TLS ciphers to be used in server connection. Defaults to `fast`. Check the [official PgBouncer documentation](https://www.pgbouncer.org/config.html) for the available values for `server_tls_ciphers`.
+- `PGBOUNCER_SERVER_TLS_SSLMODE`: Server TLS traffic settings. Defaults to `disable`. Check the [official PgBouncer documentation](https://www.pgbouncer.org/config.html) for the available values for `server_tls_sslmode`.
+- `PGBOUNCER_SERVER_TLS_KEY_FILE`: File containing the key to authenticate against PostgreSQL server. No defaults.
+- `PGBOUNCER_SERVER_TLS_CERT_FILE`: File containing the certificate associated to previous private key. PostgreSQL server can validate it. No defaults.
+- `PGBOUNCER_SERVER_TLS_CA_FILE`: File containing the CA of the server certificate. If provided, PgBouncer will authenticate TLS/SSL clients by requesting them a certificate . No defaults.
+- `PGBOUNCER_SERVER_TLS_PROTOCOLS`: TLS protocols to be used in server connection. Defaults to `secure`. Check the [official PgBouncer documentation](https://www.pgbouncer.org/config.html) for the available values for `server_tls_protocols`.
+- `PGBOUNCER_SERVER_TLS_CIPHERS`: TLS ciphers to be used in server connection. Defaults to `fast`. Check the [official PgBouncer documentation](https://www.pgbouncer.org/config.html) for the available values for `server_tls_ciphers`.
 
 When enabling TLS, PgBouncer will support both standard and encrypted traffic by default but prefer the latter. Below there are some examples of how to quickly set up client TLS traffic:
 
@@ -285,9 +297,9 @@ version: '2'
 
 services:
   pgbouncer:
-    image: 'bitnami/pgbouncer:latest'
+    image: bitnami/pgbouncer:latest
     ports:
-      - '6432:6432'
+      - 6432:6432
     volumes:
       - /path/to/pgbouncer-persistence/conf/:/bitnami/pgbouncer/conf/
 ```
@@ -324,35 +336,35 @@ The PgBouncer initialization process requires one PostgreSQL backend to be confi
 
 ```yaml
   pg1:
-    image: docker.io/bitnami/postgresql:14
+    image: docker.io/bitnami/postgresql:latest
     volumes:
-      - 'pg1_data:/bitnami/postgresql'
+      - pg1_data:/bitnami/postgresql
     environment:
       - POSTGRESQL_PASSWORD=password1
       - POSTGRESQL_DATABASE=db1
 
   pg2:
-    image: docker.io/bitnami/postgresql:15
+    image: docker.io/bitnami/postgresql:latest
     volumes:
-      - 'pg2_data:/bitnami/postgresql'
+      - pg2_data:/bitnami/postgresql
     environment:
       - POSTGRESQL_PASSWORD=password2
       - POSTGRESQL_DATABASE=db2
 
   pg3:
-    image: docker.io/bitnami/postgresql:14
+    image: docker.io/bitnami/postgresql:latest
     volumes:
-      - 'pg3_data:/bitnami/postgresql'
+      - pg3_data:/bitnami/postgresql
     environment:
       - POSTGRESQL_PASSWORD=password3
       - POSTGRESQL_DATABASE=db3
 
   pgbouncer:
-    image: docker.io/bitnami/pgbouncer:1
+    image: docker.io/bitnami/pgbouncer:latest
     ports:
       - 6432:6432
     volumes:
-      - './userlists.txt:/bitnami/userlists.txt'
+      - ./userlists.txt:/bitnami/userlists.txt
     environment:
       - POSTGRESQL_HOST=pg1
       - POSTGRESQL_PASSWORD=password1
@@ -405,7 +417,7 @@ If you encountered a problem running this container, you can file an [issue](htt
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

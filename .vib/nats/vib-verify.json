@@ -3,8 +3,7 @@
     "resources": {
       "url": "{SHA_ARCHIVE}",
       "path": "{VIB_ENV_PATH}"
-    },
-    "runtime_parameters": "Y29tbWFuZDogWyJ0YWlsIiwgIi1mIiwgIi9kZXYvbnVsbCJd"
+    }
   },
   "phases": {
     "package": {
@@ -22,12 +21,6 @@
               "linux/amd64",
               "linux/arm64"
             ]
-          }
-        },
-        {
-          "action_id": "container-image-lint",
-          "params": {
-            "threshold": "error"
           }
         }
       ]

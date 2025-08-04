@@ -15,30 +15,39 @@ docker run --name apache bitnami/apache:latest
 
 You can find the available configuration options in the [Environment Variables](#environment-variables) section.
 
-## Why use Bitnami Images?
+## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
 
-* Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
-* With Bitnami images the latest bug fixes and features are available as soon as possible.
-* Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [**minideb**](https://github.com/bitnami/minideb) -a minimalist Debian based container image that gives you a small base container image and the familiarity of a leading Linux distribution- or **scratch** -an explicitly empty image-.
-* All Bitnami images available in Docker Hub are signed with [Notation](https://notaryproject.dev/). [Check this post](https://blog.bitnami.com/2024/03/bitnami-packaged-containers-and-helm.html) to know how to verify the integrity of the images.
-* Bitnami container images are released on a regular basis with the latest distribution packages available.
+Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
 
-Looking to use Apache in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+- Granting community users access for the first time to security-optimized versions of popular container images.
+- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
+## Why use Bitnami Secure Images?
+
+- Bitnami Secure Images and Helm charts are built to make open source more secure and enterprise ready.
+- Triage security vulnerabilities faster, with transparency into CVE risks using industry standard Vulnerability Exploitability Exchange (VEX), KEV, and EPSS scores.
+- Our hardened images use a minimal OS (Photon Linux), which reduces the attack surface while maintaining extensibility through the use of an industry standard package format.
+- Stay more secure and compliant with continuously built images updated within hours of upstream patches.
+- Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
+- Hardened images come with attestation signatures (Notation), SBOMs, virus scan reports and other metadata produced in an SLSA-3 compliant software factory.
+
+Only a subset of BSI applications are available for free. Looking to access the entire catalog of applications as well as enterprise support? Try the [commercial edition of Bitnami Secure Images today](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/).
 
 ## How to deploy Apache in Kubernetes?
 
 Deploying Bitnami applications as Helm Charts is the easiest way to get started with our applications on Kubernetes. Read more about the installation in the [Bitnami Apache Chart GitHub repository](https://github.com/bitnami/charts/tree/master/bitnami/apache).
 
-Bitnami containers can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Why use a non-root container?
 
-Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-work-with-non-root-containers-index.html).
+Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-work-with-non-root-containers-index.html).
 
 ## Supported tags and respective `Dockerfile` links
 
-Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html).
+Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html).
 
 You can see the equivalence between the different tags by taking a look at the `tags-info.yaml` file present in the branch folder, i.e `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`.
 
@@ -81,10 +90,10 @@ version: '2'
 
 services:
   apache:
-    image: 'bitnami/apache:latest'
+    image: bitnami/apache:latest
     ports:
-      - '80:8080'
-      - '443:8443'
+      - 80:8080
+      - 443:8443
     volumes:
       - /path/to/app:/app
 ```
@@ -150,22 +159,22 @@ Access your web server in the browser by navigating to `http://localhost:8080/`.
 
 When you start the Apache image, you can adjust the configuration of the instance by passing one or more environment variables either on the docker-compose file or on the `docker run` command line. If you want to add a new environment variable:
 
-* For docker-compose add the variable name and value under the application section:
+- For docker-compose add the variable name and value under the application section:
 
 ```yaml
 version: '2'
 
 services:
   apache:
-    image: 'bitnami/apache:latest'
+    image: bitnami/apache:latest
     ports:
-      - '80:8081'
-      - '443:8443'
+      - 80:8081
+      - 443:8443
     environment:
       - APACHE_HTTP_PORT_NUMBER=8081
 ```
 
-* For manual execution add a `-e` option with each variable and value:
+- For manual execution add a `-e` option with each variable and value:
 
 ```console
 docker run -d --name apache -p 80:8081 -p 443:443 \
@@ -209,10 +218,10 @@ version: '2'
 
 services:
   apache:
-    image: 'bitnami/apache:latest'
+    image: bitnami/apache:latest
     ports:
-      - '80:8080'
-      - '443:8443'
+      - 80:8080
+      - 443:8443
     volumes:
       - /path/to/my_vhost.conf:/vhosts/my_vhost.conf:ro
 ```
@@ -221,7 +230,7 @@ services:
 
 *NOTE:* The steps below assume that you are using a custom domain name and that you have already configured the custom domain name to point to your server.
 
-This container comes with SSL support already pre-configured and with a dummy certificate in place (`server.crt` and `server.key` files in `/certs`). If you want to use your own certificate (`.crt`) and certificate key (`.key`) files, follow the steps below:
+This container comes with SSL support already pre-configured and with a dummy certificate in place (`tls.crt` and `tls.key` files in `/certs`). If you want to use your own certificate (`.crt`) and certificate key (`.key`) files, follow the steps below:
 
 #### Step 1: Prepare your certificate files
 
@@ -250,10 +259,10 @@ version: '2'
 
 services:
   apache:
-    image: 'bitnami/apache:latest'
+    image: bitnami/apache:latest
     ports:
-      - '80:8080'
-      - '443:8443'
+      - 80:8080
+      - 443:8443
     volumes:
       - /path/to/apache-certs:/certs
 ```
@@ -275,10 +284,10 @@ version: '2'
 
 services:
   apache:
-    image: 'bitnami/apache:latest'
+    image: bitnami/apache:latest
     ports:
-      - '80:8080'
-      - '443:8443'
+      - 80:8080
+      - 443:8443
     volumes:
       - /path/to/httpd.conf:/opt/bitnami/apache/conf/httpd.conf
 ```
@@ -289,7 +298,7 @@ Apache can be used to reverse proxy to other containers using Docker's linking s
 
 **Further Reading:**
 
-* [mod_proxy documentation](http://httpd.apache.org/docs/2.2/mod/mod_proxy.html#forwardreverse)
+- [mod_proxy documentation](http://httpd.apache.org/docs/2.2/mod/mod_proxy.html#forwardreverse)
 
 ## Logging
 
@@ -315,10 +324,10 @@ The Bitnami Apache Docker image is designed to be extended so it can be used as 
 
 Before extending this image, please note there are certain configuration settings you can modify using the original image:
 
-* Settings that can be adapted using environment variables. For instance, you can change the ports used by Apache for HTTP and HTTPS, by setting the environment variables `APACHE_HTTP_PORT_NUMBER` and `APACHE_HTTPS_PORT_NUMBER` respectively.
-* [Adding custom virtual hosts](#adding-custom-virtual-hosts).
-* [Replacing the 'httpd.conf' file](#full-configuration).
-* [Using custom SSL certificates](#using-custom-ssl-certificates).
+- Settings that can be adapted using environment variables. For instance, you can change the ports used by Apache for HTTP and HTTPS, by setting the environment variables `APACHE_HTTP_PORT_NUMBER` and `APACHE_HTTPS_PORT_NUMBER` respectively.
+- [Adding custom virtual hosts](#adding-custom-virtual-hosts).
+- [Replacing the 'httpd.conf' file](#full-configuration).
+- [Using custom SSL certificates](#using-custom-ssl-certificates).
 
 If your desired customizations cannot be covered using the methods mentioned above, extend the image. To do so, create your own image using a Dockerfile with the format below:
 
@@ -330,10 +339,10 @@ FROM bitnami/apache
 
 Here is an example of extending the image with the following modifications:
 
-* Install the `vim` editor
-* Modify the Apache configuration file
-* Modify the ports used by Apache
-* Change the user that runs the container
+- Install the `vim` editor
+- Modify the Apache configuration file
+- Modify the ports used by Apache
+- Change the user that runs the container
 
 ```Dockerfile
 FROM bitnami/apache
@@ -359,9 +368,9 @@ USER 1002
 
 Based on the extended image, you can use a Docker Compose file like the one below to add other features:
 
-* Add a custom virtual host
-* Add custom certificates
-* Clone your web application and serve it through Apache
+- Add a custom virtual host
+- Add custom certificates
+- Clone your web application and serve it through Apache
 
 ```yaml
 version: '2'
@@ -370,8 +379,8 @@ services:
   apache:
     build: .
     ports:
-      - '80:8181'
-      - '443:8443'
+      - 80:8181
+      - 443:8443
     depends_on:
       - cloner
     volumes:
@@ -379,7 +388,7 @@ services:
       - ./certs:/certs
       - data:/app
   cloner:
-    image: 'bitnami/git:latest'
+    image: bitnami/git:latest
     command:
       - clone
       - https://github.com/cloudacademy/static-website-example
@@ -456,31 +465,34 @@ docker-compose up apache
 
 ## Useful Links
 
-* [Create An AMP Development Environment With Bitnami Containers
-](https://docs.bitnami.com/containers/how-to/create-amp-environment-containers/)
+- [Create An AMP Development Environment With Bitnami Containers](https://docs.bitnami.com/containers/how-to/create-amp-environment-containers/)
 
 ## Notable Changes
 
+### 2.4.64-debian-12-r2
+
+- This image updates TLS-related files: certificates and keys are now `tls.crt`/`tls.key` (from `server.crt`/`server.key`), and the certificate signing request is now `tls.csr` (from `server.csr`). This change aligns better with the kubernetes.io/tls secret type, enhancing consistency.
+
 ### 2.4.54-debian-11-r22
 
-* Removed the [Apache PageSpeed Module (`mod_pagespeed`)](https://developers.google.com/speed/pagespeed/module).
+- Removed the [Apache PageSpeed Module (`mod_pagespeed`)](https://developers.google.com/speed/pagespeed/module).
 
 ### 2.4.43-debian-10-r66
 
-* Included [Apache PageSpeed Module (`mod_pagespeed`)](https://developers.google.com/speed/pagespeed/module). It is disabled by default. To enable it, uncomment the following lines in `httpd.conf`:
+- Included [Apache PageSpeed Module (`mod_pagespeed`)](https://developers.google.com/speed/pagespeed/module). It is disabled by default. To enable it, uncomment the following lines in `httpd.conf`:
 
 ```config
 ##Include conf/pagespeed.conf
 ##Include conf/pagespeed_libraries.conf
 ```
 
-* Included [ModSecurity v2](https://github.com/SpiderLabs/ModSecurity). It is disabled by default. To enable it, mount and enable your custom ModSecurity rules for the virtual hosts, and uncomment the following line in `httpd.conf`:
+- Included [ModSecurity v2](https://github.com/SpiderLabs/ModSecurity). It is disabled by default. To enable it, mount and enable your custom ModSecurity rules for the virtual hosts, and uncomment the following line in `httpd.conf`:
 
 ```config
 ##LoadModule security2_module modules/mod_security2.so
 ```
 
-* Included [ModSecurity v3](https://github.com/SpiderLabs/ModSecurity) and [ModSecurity v3 Apache Connector (`mod_security3`)](https://github.com/SpiderLabs/ModSecurity-apache). It is disabled by default. To enable it, mount and enable your custom ModSecurity rules for the virtual hosts, and uncomment the following line in `httpd.conf`:
+- Included [ModSecurity v3](https://github.com/SpiderLabs/ModSecurity) and [ModSecurity v3 Apache Connector (`mod_security3`)](https://github.com/SpiderLabs/ModSecurity-apache). It is disabled by default. To enable it, mount and enable your custom ModSecurity rules for the virtual hosts, and uncomment the following line in `httpd.conf`:
 
 ```config
 ##LoadModule security3_module modules/mod_security3.so
@@ -488,26 +500,26 @@ docker-compose up apache
 
 ### 2.4.41-debian-9-r40 and 2.4.41-ol-7-r42
 
-* Decrease the size of the container. The configuration logic is now based on Bash scripts in the `rootfs/` folder.
+- Decrease the size of the container. The configuration logic is now based on Bash scripts in the `rootfs/` folder.
 
 ### 2.4.39-debian-9-r40 and 2.4.39-ol-7-r50
 
-* This image has been adapted so it's easier to customize. See the [Customize this image](#customize-this-image) section for more information.
-* The Apache configuration volume (`/bitnami/apache`) has been deprecated, and support for this feature will be dropped in the near future. Until then, the container will enable the Apache configuration from that volume if it exists. By default, and if the configuration volume does not exist, the configuration files will be regenerated each time the container is created. Users wanting to apply custom Apache configuration files are advised to mount a volume for the configuration at `/opt/bitnami/apache/conf`, or mount specific configuration files individually.
-* Enabling custom Apache certificates by placing them at `/opt/bitnami/apache/certs` has been deprecated, and support for this functionality will be dropped in the near future. Users wanting to enable custom certificates are advised to mount their certificate files on top of the preconfigured ones at `/certs`. Find an example at [Using custom SSL certificates](#using-custom-ssl-certificates).
+- This image has been adapted so it's easier to customize. See the [Customize this image](#customize-this-image) section for more information.
+- The Apache configuration volume (`/bitnami/apache`) has been deprecated, and support for this feature will be dropped in the near future. Until then, the container will enable the Apache configuration from that volume if it exists. By default, and if the configuration volume does not exist, the configuration files will be regenerated each time the container is created. Users wanting to apply custom Apache configuration files are advised to mount a volume for the configuration at `/opt/bitnami/apache/conf`, or mount specific configuration files individually.
+- Enabling custom Apache certificates by placing them at `/opt/bitnami/apache/certs` has been deprecated, and support for this functionality will be dropped in the near future. Users wanting to enable custom certificates are advised to mount their certificate files on top of the preconfigured ones at `/certs`. Find an example at [Using custom SSL certificates](#using-custom-ssl-certificates).
 
 ### 2.4.34-r8
 
-* The Apache container has been migrated to a non-root user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `apache` user. From now on, both the container and the Apache daemon run as user `1001`. As a consequence, the HTTP/HTTPS ports exposed by the container are now 8080/8443 instead of 80/443. You can revert this behavior by changing `USER 1001` to `USER root` in the Dockerfile.
+- The Apache container has been migrated to a non-root user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `apache` user. From now on, both the container and the Apache daemon run as user `1001`. As a consequence, the HTTP/HTTPS ports exposed by the container are now 8080/8443 instead of 80/443. You can revert this behavior by changing `USER 1001` to `USER root` in the Dockerfile.
 
 ### 2.4.18-r0
 
-* The configuration volume has been moved to `/bitnami/apache`. Now you only need to mount a single volume at `/bitnami/apache` for persisting configuration. `/app` is still used for serving content by the default virtual host.
-* The logs are always sent to the `stdout` and are no longer collected in the volume.
+- The configuration volume has been moved to `/bitnami/apache`. Now you only need to mount a single volume at `/bitnami/apache` for persisting configuration. `/app` is still used for serving content by the default virtual host.
+- The logs are always sent to the `stdout` and are no longer collected in the volume.
 
 ### 2.4.12-4-r01
 
-* The `/app` directory is no longer exported as a volume. This caused problems when building on top of the image, since changes in the volume are not persisted between Dockerfile `RUN` instructions. To keep the previous behavior (so that you can mount the volume in another container), create the container with the `-v /app` option.
+- The `/app` directory is no longer exported as a volume. This caused problems when building on top of the image, since changes in the volume are not persisted between Dockerfile `RUN` instructions. To keep the previous behavior (so that you can mount the volume in another container), create the container with the `-v /app` option.
 
 ## Using `docker-compose.yaml`
 
@@ -525,7 +537,7 @@ If you encountered a problem running this container, you can file an [issue](htt
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

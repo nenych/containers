@@ -4,7 +4,7 @@
 
 > PHP-FPM (FastCGI Process Manager) is an alternative PHP FastCGI implementation with some additional features useful for sites of any size, especially busier sites.
 
-[Overview of PHP-FPM](http://php-fpm.org/)
+[Overview of PHP-FPM](https://php-fpm.org/)
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
 ## TL;DR
@@ -13,20 +13,31 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 docker run -it --name phpfpm -v /path/to/app:/app bitnami/php-fpm
 ```
 
-## Why use Bitnami Images?
+## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
 
-* Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
-* With Bitnami images the latest bug fixes and features are available as soon as possible.
-* Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [**minideb**](https://github.com/bitnami/minideb) -a minimalist Debian based container image that gives you a small base container image and the familiarity of a leading Linux distribution- or **scratch** -an explicitly empty image-.
-* All Bitnami images available in Docker Hub are signed with [Notation](https://notaryproject.dev/). [Check this post](https://blog.bitnami.com/2024/03/bitnami-packaged-containers-and-helm.html) to know how to verify the integrity of the images.
-* Bitnami container images are released on a regular basis with the latest distribution packages available.
+Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
 
-Looking to use PHP-FPM in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+- Granting community users access for the first time to security-optimized versions of popular container images.
+- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
+## Why use Bitnami Secure Images?
+
+- Bitnami Secure Images and Helm charts are built to make open source more secure and enterprise ready.
+- Triage security vulnerabilities faster, with transparency into CVE risks using industry standard Vulnerability Exploitability Exchange (VEX), KEV, and EPSS scores.
+- Our hardened images use a minimal OS (Photon Linux), which reduces the attack surface while maintaining extensibility through the use of an industry standard package format.
+- Stay more secure and compliant with continuously built images updated within hours of upstream patches.
+- Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
+- Hardened images come with attestation signatures (Notation), SBOMs, virus scan reports and other metadata produced in an SLSA-3 compliant software factory.
+
+Only a subset of BSI applications are available for free. Looking to access the entire catalog of applications as well as enterprise support? Try the [commercial edition of Bitnami Secure Images today](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/).
 
 ## Supported tags and respective `Dockerfile` links
 
-Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html).
+Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html).
 
 You can see the equivalence between the different tags by taking a look at the `tags-info.yaml` file present in the branch folder, i.e `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`.
 
@@ -40,9 +51,9 @@ The `prod` tags has been removed; from now on just the regular container images 
 
 The formatting convention for `prod` tags has been changed:
 
-* `BRANCH-debian-10-prod` is now tagged as `BRANCH-prod-debian-10`
-* `VERSION-debian-10-rX-prod` is now tagged as `VERSION-prod-debian-10-rX`
-* `latest-prod` is now deprecated
+- `BRANCH-debian-10-prod` is now tagged as `BRANCH-prod-debian-10`
+- `VERSION-debian-10-rX-prod` is now tagged as `VERSION-prod-debian-10-rX`
+- `latest-prod` is now deprecated
 
 ## Get this image
 
@@ -134,7 +145,7 @@ or using Docker Compose:
 ```yaml
 services:
   phpfpm:
-    image: 'bitnami/php-fpm:latest'
+    image: bitnami/php-fpm:latest
     networks:
       - app-tier
     volumes:
@@ -155,14 +166,14 @@ or using Docker Compose:
 ```yaml
 services:
   nginx:
-    image: 'bitnami/nginx:latest'
+    image: bitnami/nginx:latest
     depends_on:
       - phpfpm
     networks:
       - app-tier
     ports:
-      - '80:80'
-      - '443:443'
+      - 80:80
+      - 443:443
     volumes:
       - /path/to/server_block.conf:/opt/bitnami/nginx/conf/server_blocks/yourapp.conf
 ```
@@ -181,7 +192,7 @@ docker run -it --name phpfpm bitnami/php-fpm php -a
 
 **Further Reading:**
 
-* [PHP Interactive Shell Documentation](http://php.net/manual/en/features.commandline.interactive.php)
+- [PHP Interactive Shell Documentation](http://php.net/manual/en/features.commandline.interactive.php)
 
 ## Running your PHP script
 
@@ -387,33 +398,31 @@ docker-compose up phpfpm
 
 ## Useful Links
 
-* [Create An AMP Development Environment With Bitnami Containers
-](https://docs.bitnami.com/containers/how-to/create-amp-environment-containers/)
-* [Create An EMP Development Environment With Bitnami Containers
-](https://docs.bitnami.com/containers/how-to/create-emp-environment-containers/)
+- [Create An AMP Development Environment With Bitnami Containers](https://docs.bitnami.com/containers/how-to/create-amp-environment-containers/)
+- [Create An EMP Development Environment With Bitnami Containers](https://docs.bitnami.com/containers/how-to/create-emp-environment-containers/)
 
 ## Notable Changes
 
 ### 7.2.3-r2, 7.1.15-r2, 7.0.28-r2 and 5.6.34-r2 (2018-03-13)
 
-* PHP has been configured at compile time to scan the `/opt/bitnami/php/etc/conf.d/` folder for extra .ini configuration files.
+- PHP has been configured at compile time to scan the `/opt/bitnami/php/etc/conf.d/` folder for extra .ini configuration files.
 
 ### 7.0.6-r0 (2016-05-17)
 
-* All volumes have been merged at `/bitnami/php-fpm`. Now you only need to mount a single volume at `/bitnami/php-fpm` for persistence.
-* The logs are always sent to the `stdout` and are no longer collected in the volume.
+- All volumes have been merged at `/bitnami/php-fpm`. Now you only need to mount a single volume at `/bitnami/php-fpm` for persistence.
+- The logs are always sent to the `stdout` and are no longer collected in the volume.
 
 ### 5.5.30-2 (2015-12-07)
 
-* Enables support for imagick extension
+- Enables support for imagick extension
 
 ### 5.5.30-0-r01 (2015-11-10)
 
-* `php.ini` is now exposed in the volume mounted at `/bitnami/php-fpm/conf/` allowing users to change the defaults as per their requirements.
+- `php.ini` is now exposed in the volume mounted at `/bitnami/php-fpm/conf/` allowing users to change the defaults as per their requirements.
 
 ### 5.5.30-0 (2015-10-06)
 
-* `/app` directory is no longer exported as a volume. This caused problems when building on top of the image, since changes in the volume are not persisted between Dockerfile `RUN` instructions. To keep the previous behavior (so that you can mount the volume in another container), create the container with the `-v /app` option.
+- `/app` directory is no longer exported as a volume. This caused problems when building on top of the image, since changes in the volume are not persisted between Dockerfile `RUN` instructions. To keep the previous behavior (so that you can mount the volume in another container), create the container with the `-v /app` option.
 
 ## Using `docker-compose.yaml`
 
@@ -431,7 +440,7 @@ If you encountered a problem running this container, you can file an [issue](htt
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

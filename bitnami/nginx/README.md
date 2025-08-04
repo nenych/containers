@@ -1,14 +1,10 @@
 # Bitnami package for NGINX Open Source
 
-## Deprecation Notice
-
-The NGINX Open Source container will no longer be released in our catalog, but already released container images will still persist in the registries.
-
 ## What is NGINX Open Source?
 
 > NGINX Open Source is a web server that can be also used as a reverse proxy, load balancer, and HTTP cache. Recommended for high-demanding sites due to its ability to provide faster content.
 
-[Overview of NGINX Open Source](http://nginx.org)
+[Overview of NGINX Open Source](https://nginx.org)
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
 ## TL;DR
@@ -17,30 +13,39 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 docker run --name nginx bitnami/nginx:latest
 ```
 
-## Why use Bitnami Images?
+## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
 
-* Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
-* With Bitnami images the latest bug fixes and features are available as soon as possible.
-* Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [**minideb**](https://github.com/bitnami/minideb) -a minimalist Debian based container image that gives you a small base container image and the familiarity of a leading Linux distribution- or **scratch** -an explicitly empty image-.
-* All Bitnami images available in Docker Hub are signed with [Notation](https://notaryproject.dev/). [Check this post](https://blog.bitnami.com/2024/03/bitnami-packaged-containers-and-helm.html) to know how to verify the integrity of the images.
-* Bitnami container images are released on a regular basis with the latest distribution packages available.
+Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
 
-Looking to use NGINX Open Source in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+- Granting community users access for the first time to security-optimized versions of popular container images.
+- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
+## Why use Bitnami Secure Images?
+
+- Bitnami Secure Images and Helm charts are built to make open source more secure and enterprise ready.
+- Triage security vulnerabilities faster, with transparency into CVE risks using industry standard Vulnerability Exploitability Exchange (VEX), KEV, and EPSS scores.
+- Our hardened images use a minimal OS (Photon Linux), which reduces the attack surface while maintaining extensibility through the use of an industry standard package format.
+- Stay more secure and compliant with continuously built images updated within hours of upstream patches.
+- Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
+- Hardened images come with attestation signatures (Notation), SBOMs, virus scan reports and other metadata produced in an SLSA-3 compliant software factory.
+
+Only a subset of BSI applications are available for free. Looking to access the entire catalog of applications as well as enterprise support? Try the [commercial edition of Bitnami Secure Images today](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/).
 
 ## How to deploy NGINX Open Source in Kubernetes?
 
 Deploying Bitnami applications as Helm Charts is the easiest way to get started with our applications on Kubernetes. Read more about the installation in the [Bitnami NGINX Open Source Chart GitHub repository](https://github.com/bitnami/charts/tree/master/bitnami/nginx).
 
-Bitnami containers can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Why use a non-root container?
 
-Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-work-with-non-root-containers-index.html).
+Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-work-with-non-root-containers-index.html).
 
 ## Supported tags and respective `Dockerfile` links
 
-Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html).
+Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html).
 
 You can see the equivalence between the different tags by taking a look at the `tags-info.yaml` file present in the branch folder, i.e `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`.
 
@@ -131,7 +136,7 @@ server {
 }
 ```
 
-## Step 2: Mount the configuration as a volume
+## Step 2: Mount the server block as a volume
 
 ```console
 docker run --name nginx \
@@ -150,18 +155,105 @@ services:
   ...
 ```
 
+### Adding custom configuration by context
+
+The default `nginx.conf` supports custom configuration files organized by NGINX context. You can mount configuration files into the appropriate context directories:
+
+- `/opt/bitnami/nginx/conf/context.d/main/` - For main context directives (e.g., module loading, worker processes)
+- `/opt/bitnami/nginx/conf/context.d/events/` - For events context directives (e.g., worker_connections)
+- `/opt/bitnami/nginx/conf/context.d/http/` - For http context directives (equivalent to server_blocks)
+
+For example, to enable the WebDAV module, create a `webdav.conf` file with the following content:
+
+```nginx
+load_module /opt/bitnami/nginx/modules/ngx_http_dav_module.so;
+```
+
+Mount it to the main context directory:
+
+```console
+docker run --name nginx \
+  -v /path/to/webdav.conf:/opt/bitnami/nginx/conf/context.d/main/webdav.conf:ro \
+  bitnami/nginx:latest
+```
+
+or by modifying the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/nginx/docker-compose.yml) file:
+
+```yaml
+services:
+  nginx:
+  ...
+    volumes:
+      - /path/to/webdav.conf:/opt/bitnami/nginx/conf/context.d/main/webdav.conf:ro
+  ...
+```
+
+Similarly, you can add custom server blocks to the http context:
+
+```console
+docker run --name nginx \
+  -v /path/to/my_server_block.conf:/opt/bitnami/nginx/conf/context.d/http/my_server_block.conf:ro \
+  bitnami/nginx:latest
+```
+
+### Adding custom stream server blocks
+
+Similar to server blocks, you can include server blocks for the [NGINX Stream Core Module](https://nginx.org/en/docs/stream/ngx_stream_core_module.html) mounting them at `/opt/bitnami/nginx/conf/stream_server_blocks/`. In order to do so, it's also necessary to set the `NGINX_ENABLE_STREAM` environment variable to `yes`.
+
+## Step 1: Write your `my_stream_server_block.conf` file with the following content
+
+```nginx
+upstream backend {
+    hash $remote_addr consistent;
+
+    server backend1.example.com:12345 weight=5;
+    server 127.0.0.1:12345            max_fails=3 fail_timeout=30s;
+    server unix:/tmp/backend3;
+}
+
+server {
+    listen 12345;
+    proxy_connect_timeout 1s;
+    proxy_timeout 3s;
+    proxy_pass backend;
+}
+```
+
+## Step 2: Mount the stream server block as a volume
+
+```console
+docker run --name nginx \
+  -e NGINX_ENABLE_STREAM=yes \
+  -v /path/to/my_stream_server_block.conf:/opt/bitnami/nginx/conf/stream_server_blocks/my_stream_server_block.conf:ro \
+  bitnami/nginx:latest
+```
+
+or by modifying the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/nginx/docker-compose.yml) file present in this repository:
+
+```yaml
+services:
+  nginx:
+  ...
+    environment:
+      - NGINX_ENABLE_STREAM=yes
+  ...
+    volumes:
+      - /path/to/my_stream_server_block.conf:/opt/bitnami/nginx/conf/stream_server_blocks/my_stream_server_block.conf:ro
+  ...
+```
+
 ### Using custom SSL certificates
 
 *NOTE:* The steps below assume that you are using a custom domain name and that you have already configured the custom domain name to point to your server.
 
 #### Step 1: Prepare your certificate files
 
-In your local computer, create a folder called `certs` and put your certificates files. Make sure you rename both files to `server.crt` and `server.key` respectively:
+In your local computer, create a folder called `certs` and put your certificates files. Make sure you rename both files to `tls.crt` and `tls.key` respectively:
 
 ```console
 mkdir -p /path/to/nginx-persistence/certs
-cp /path/to/certfile.crt /path/to/nginx-persistence/certs/server.crt
-cp /path/to/keyfile.key  /path/to/nginx-persistence/certs/server.key
+cp /path/to/certfile.crt /path/to/nginx-persistence/certs/tls.crt
+cp /path/to/keyfile.key  /path/to/nginx-persistence/certs/tls.key
 ```
 
 #### Step 2: Provide a custom Server Block for SSL connections
@@ -172,8 +264,8 @@ Write your `my_server_block.conf` file with the SSL configuration and the relati
   server {
     listen       8443 ssl;
 
-    ssl_certificate      bitnami/certs/server.crt;
-    ssl_certificate_key  bitnami/certs/server.key;
+    ssl_certificate      bitnami/certs/tls.crt;
+    ssl_certificate_key  bitnami/certs/tls.key;
 
     ssl_session_cache    shared:SSL:1m;
     ssl_session_timeout  5m;
@@ -346,7 +438,7 @@ server {
 
 **Further Reading:**
 
-* [NGINX reverse proxy](http://nginx.com/resources/admin-guide/reverse-proxy/)
+- [NGINX reverse proxy](http://nginx.com/resources/admin-guide/reverse-proxy/)
 
 ## Logging
 
@@ -372,11 +464,11 @@ The Bitnami NGINX Open Source Docker image is designed to be extended so it can 
 
 Before extending this image, please note there are certain configuration settings you can modify using the original image:
 
-* Settings that can be adapted using environment variables. For instance, you can change the port used by NGINX for HTTP setting the environment variable `NGINX_HTTP_PORT_NUMBER`.
-* [Adding custom server blocks](#adding-custom-server-blocks).
-* [Replacing the 'nginx.conf' file](#full-configuration).
-* [Using custom SSL certificates](#using-custom-ssl-certificates).
-* [Solving redirection issues](#solving-redirection-issues).
+- Settings that can be adapted using environment variables. For instance, you can change the port used by NGINX for HTTP setting the environment variable `NGINX_HTTP_PORT_NUMBER`.
+- [Adding custom server blocks](#adding-custom-server-blocks).
+- [Replacing the 'nginx.conf' file](#full-configuration).
+- [Using custom SSL certificates](#using-custom-ssl-certificates).
+- [Solving redirection issues](#solving-redirection-issues).
 
 If your desired customizations cannot be covered using the methods mentioned above, extend the image. To do so, create your own image using a Dockerfile with the format below:
 
@@ -388,10 +480,10 @@ FROM bitnami/nginx
 
 Here is an example of extending the image with the following modifications:
 
-* Install the `vim` editor
-* Modify the NGINX configuration file
-* Modify the ports used by NGINX
-* Change the user that runs the container
+- Install the `vim` editor
+- Modify the NGINX configuration file
+- Modify the ports used by NGINX
+- Change the user that runs the container
 
 ```Dockerfile
 FROM bitnami/nginx
@@ -416,9 +508,9 @@ USER 1002
 
 Based on the extended image, you can use a Docker Compose file like the one below to add other features:
 
-* Add a custom server block
-* Add custom certificates
-* Clone your web application and serve it through NGINX
+- Add a custom server block
+- Add custom certificates
+- Clone your web application and serve it through NGINX
 
 ```yaml
 version: '2'
@@ -427,8 +519,8 @@ services:
   nginx:
     build: .
     ports:
-      - '80:8181'
-      - '443:8443'
+      - 80:8181
+      - 443:8443
     depends_on:
       - cloner
     volumes:
@@ -436,7 +528,7 @@ services:
       - ./certs:/certs
       - data:/app
   cloner:
-    image: 'bitnami/git:latest'
+    image: bitnami/git:latest
     command:
       - clone
       - https://github.com/cloudacademy/static-website-example
@@ -446,6 +538,14 @@ services:
 volumes:
   data:
     driver: local
+```
+
+#### NGINX HTTP DAV module
+
+The [module ngx_http_dav_module](https://nginx.org/en/docs/http/ngx_http_dav_module.html) is intended for file management automation via the WebDAV protocol. In current Bitnami images, this module is built as a dynamic module located under the `/opt/bitnami/nginx/modules` directory. You will need to load it in your NGINX configuration for you to be able to use its directives.
+
+```text
+load_module /opt/bitnami/nginx/modules/ngx_http_dav_module.so;
 ```
 
 #### Adding custom NGINX modules
@@ -471,8 +571,8 @@ RUN install_packages dirmngr gpg gpg-agent curl build-essential libpcre3-dev zli
 RUN gpg --keyserver pgp.mit.edu --recv-key 520A9993A1C052F8
 ## Download NGINX, verify integrity and extract
 RUN cd /tmp && \
-    curl -O http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz && \
-    curl -O http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc && \
+    curl -O https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz && \
+    curl -O https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc && \
     gpg --verify nginx-${NGINX_VERSION}.tar.gz.asc nginx-${NGINX_VERSION}.tar.gz && \
     tar xzf nginx-${NGINX_VERSION}.tar.gz
 ## Compile NGINX with desired module
@@ -553,27 +653,35 @@ docker-compose up nginx
 
 ## Useful Links
 
-* [Create An EMP Development Environment With Bitnami Containers](https://docs.bitnami.com/containers/how-to/create-emp-environment-containers/)
+- [Create An EMP Development Environment With Bitnami Containers](https://docs.bitnami.com/containers/how-to/create-emp-environment-containers/)
 
 ## Notable Changes
 
+### Starting February 10, 2025
+
+- The [module ngx_http_dav_module](http://nginx.org/en/docs/http/ngx_http_dav_module.html), WebDAV protocol, has been converted into a dynamic module.
+
+### 1.29.0-debian-12-r4
+
+- This image updates TLS-related files: certificates and keys are now `tls.crt`/`tls.key` (from `server.crt`/`server.key`), and the certificate signing request is now `tls.csr` (from `server.csr`). This change aligns better with the kubernetes.io/tls secret type, enhancing consistency.
+
 ### 1.24.0-debian-11-r142 and 1.25.2-debian-11-r33
 
-* Added support for [Module ngx_http_dav_module](http://nginx.org/en/docs/http/ngx_http_dav_module.html), WebDAV protocol.
+- Added support for [Module ngx_http_dav_module](http://nginx.org/en/docs/http/ngx_http_dav_module.html), WebDAV protocol.
 
 ### 1.18.0-debian-10-r210 and 1.19.6-debian-10-r1
 
-* Added support for enabling dynamic modules.
+- Added support for enabling dynamic modules.
 
 ### 1.16.1-centos-7-r173
 
-* `1.16.1-centos-7-r173` is considered the latest image based on CentOS.
-* Standard supported distros: Debian & OEL.
+- `1.16.1-centos-7-r173` is considered the latest image based on CentOS.
+- Standard supported distros: Debian & OEL.
 
 ### 1.16.0-r3
 
-* This image has been adapted so it's easier to customize. See the [Customize this image](#customize-this-image) section for more information.
-* The recommended mount point for adding custom server blocks changes from `/opt/bitnami/nginx/conf/vhosts` to `/opt/bitnami/nginx/conf/server_blocks`. Remember to update your Docker Compose files to user the new mount point.
+- This image has been adapted so it's easier to customize. See the [Customize this image](#customize-this-image) section for more information.
+- The recommended mount point for adding custom server blocks changes from `/opt/bitnami/nginx/conf/vhosts` to `/opt/bitnami/nginx/conf/server_blocks`. Remember to update your Docker Compose files to user the new mount point.
 
 ## Using `docker-compose.yaml`
 
@@ -591,7 +699,7 @@ If you encountered a problem running this container, you can file an [issue](htt
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

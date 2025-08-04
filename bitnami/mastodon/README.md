@@ -13,20 +13,31 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 docker run -it --name mastodon bitnami/mastodon
 ```
 
-## Why use Bitnami Images?
+## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
 
-* Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
-* With Bitnami images the latest bug fixes and features are available as soon as possible.
-* Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [**minideb**](https://github.com/bitnami/minideb) -a minimalist Debian based container image that gives you a small base container image and the familiarity of a leading Linux distribution- or **scratch** -an explicitly empty image-.
-* All Bitnami images available in Docker Hub are signed with [Notation](https://notaryproject.dev/). [Check this post](https://blog.bitnami.com/2024/03/bitnami-packaged-containers-and-helm.html) to know how to verify the integrity of the images.
-* Bitnami container images are released on a regular basis with the latest distribution packages available.
+Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
 
-Looking to use Mastodon in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+- Granting community users access for the first time to security-optimized versions of popular container images.
+- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
+## Why use Bitnami Secure Images?
+
+- Bitnami Secure Images and Helm charts are built to make open source more secure and enterprise ready.
+- Triage security vulnerabilities faster, with transparency into CVE risks using industry standard Vulnerability Exploitability Exchange (VEX), KEV, and EPSS scores.
+- Our hardened images use a minimal OS (Photon Linux), which reduces the attack surface while maintaining extensibility through the use of an industry standard package format.
+- Stay more secure and compliant with continuously built images updated within hours of upstream patches.
+- Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
+- Hardened images come with attestation signatures (Notation), SBOMs, virus scan reports and other metadata produced in an SLSA-3 compliant software factory.
+
+Only a subset of BSI applications are available for free. Looking to access the entire catalog of applications as well as enterprise support? Try the [commercial edition of Bitnami Secure Images today](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/).
 
 ## Supported tags and respective `Dockerfile` links
 
-Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html).
+Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html).
 
 You can see the equivalence between the different tags by taking a look at the `tags-info.yaml` file present in the branch folder, i.e `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`.
 
@@ -120,9 +131,12 @@ docker-compose up mastodon
 | `MASTODON_AUTHORIZED_FETCH`          | Use secure mode.                                                      | `false`                                                                        |
 | `MASTODON_LIMITED_FEDERATION_MODE`   | Use an allow-list for federating with other servers.                  | `false`                                                                        |
 | `MASTODON_STREAMING_API_BASE_URL`    | Mastodon public api base url.                                         | `ws://localhost:${MASTODON_STREAMING_PORT_NUMBER}`                             |
+| `MASTODON_SMTP_LOGIN`                | SMTP server authentication username.                                  | `5432`                                                                         |
+| `MASTODON_SMTP_PASSWORD`             | SMTP server authentication password.                                  | `bitnami_mastodon`                                                             |
 | `RAILS_SERVE_STATIC_FILES`           | Have puma server the static files in the public/ folder               | `true`                                                                         |
 | `MASTODON_BIND_ADDRESS`              | Address to listen for interfaces                                      | `0.0.0.0`                                                                      |
 | `MASTODON_DATA_TO_PERSIST`           | Data to persist from installations.                                   | `$MASTODON_ASSETS_DIR $MASTODON_SYSTEM_DIR`                                    |
+| `MASTODON_USE_LIBVIPS`               | Use libvips for image processing instead of ImageMagick.              | `true`                                                                         |
 | `MASTODON_MIGRATE_DATABASE`          | Run rake db:migrate job.                                              | `true`                                                                         |
 | `MASTODON_DATABASE_HOST`             | Database server host.                                                 | `postgresql`                                                                   |
 | `MASTODON_DATABASE_PORT_NUMBER`      | Database server port.                                                 | `5432`                                                                         |
@@ -137,7 +151,7 @@ docker-compose up mastodon
 | `MASTODON_MIGRATE_ELASTICSEARCH`     | Run rake chewy:upgrade on startup.                                    | `true`                                                                         |
 | `MASTODON_ELASTICSEARCH_HOST`        | Elasticsearch server host.                                            | `elasticsearch`                                                                |
 | `MASTODON_ELASTICSEARCH_PORT_NUMBER` | Elasticsearch server port.                                            | `9200`                                                                         |
-| `MASTODON_ELASTICSEARCH_USER`        | Elasticsearch user password.                                          | `elastic`                                                                      |
+| `MASTODON_ELASTICSEARCH_USER`        | Elasticsearch user.                                                   | `elastic`                                                                      |
 | `MASTODON_ELASTICSEARCH_PASSWORD`    | Elasticsearch user password.                                          | `nil`                                                                          |
 | `MASTODON_S3_ENABLED`                | Enable S3                                                             | `false`                                                                        |
 | `MASTODON_S3_BUCKET`                 | S3 Bucket for storing data                                            | `bitnami_mastodon`                                                             |
@@ -168,7 +182,7 @@ docker-compose up mastodon
 
 When you start the Mastodon image, you can adjust the configuration of the instance by passing one or more environment variables either on the docker-compose file or on the `docker run` command line. Please note that some variables are only considered when the container is started for the first time. If you want to add a new environment variable:
 
-* For docker-compose add the variable name and value under the application section in the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/mastodon/docker-compose.yml) file present in this repository:
+- For docker-compose add the variable name and value under the application section in the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/mastodon/docker-compose.yml) file present in this repository:
 
     ```yaml
     mastodon-api:
@@ -178,7 +192,7 @@ When you start the Mastodon image, you can adjust the configuration of the insta
       ...
     ```
 
-* For manual execution add a `--env` option with each variable and value:
+- For manual execution add a `--env` option with each variable and value:
 
     ```console
     $ docker run -d --name mastodon-api -p 80:8080 -p 443:8443 \
@@ -197,9 +211,9 @@ In addition to the official environment variables, the Bitnami Mastodon image ad
 
 Mastodon supports three running modes:
 
-* Web: The Mastodon web frontend. It is the essential functional element of Mastodon.
-* Streaming: Necessary for performing real-time interactions inside Mastodon.
-* Sidekiq: Performs background operations like sending emails.
+- Web: The Mastodon web frontend. It is the essential functional element of Mastodon.
+- Streaming: Necessary for performing real-time interactions inside Mastodon.
+- Sidekiq: Performs background operations like sending emails.
 
 The running mode is defined via the `MASTODON_MODE` environment variable. The possible values are `web`, `streaming` and `sidekiq`.
 
@@ -207,7 +221,7 @@ The running mode is defined via the `MASTODON_MODE` environment variable. The po
 
 The Bitnami Mastodon container supports connecting the Mastodon application to an external database. This would be an example of using an external database for Mastodon.
 
-* Modify the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/mastodon/docker-compose.yml) file present in this repository:
+- Modify the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/mastodon/docker-compose.yml) file present in this repository:
 
     ```diff
        mastodon:
@@ -222,7 +236,7 @@ The Bitnami Mastodon container supports connecting the Mastodon application to a
          ...
     ```
 
-* For manual execution:
+- For manual execution:
 
     ```console
     $ docker run -d --name mastodon\
@@ -269,7 +283,7 @@ If you encountered a problem running this container, you can file an [issue](htt
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

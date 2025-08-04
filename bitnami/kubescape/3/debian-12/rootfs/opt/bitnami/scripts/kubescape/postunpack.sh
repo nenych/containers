@@ -15,7 +15,7 @@ set -o pipefail
 . /opt/bitnami/scripts/kubescape-env.sh
 
 # Download Tanzu Application Catalog list, required for 'oss-assessment' custom action
-curl --fail -sLo "${TANZU_APPLICATION_CATALOG_FILE}" "https://api.app-catalog.vmware.com/v1/applications?scope=COMMON&scope=ONLY_CUSTOMERS"
+curl --fail -sLo "${TANZU_APPLICATION_CATALOG_FILE}" "https://api.app-catalog.vmware.com/v1/applications?only_eligible=true&distributable=true&scope=COMMON&scope=ONLY_CUSTOMERS"
 
 # Configuring permissions for tmp and logs folders
 for dir in "$KUBESCAPE_CACHE_DIR" "$KUBESCAPE_ARTIFACTS_DIR"; do
@@ -26,4 +26,6 @@ done
 # Download kubescape artifacts
 # Also ensure permissions are properly configured
 kubescape download artifacts
+# Create an inputs file that avoids PASSWORD_FILE and other *_FILE env variable false positives
+jq '.sensitiveKeyNamesAllowed += ["_FILE"]' "${KUBESCAPE_ARTIFACTS_DIR}/controls-inputs.json" > "${KUBESCAPE_ARTIFACTS_DIR}/controls-inputs-bn.json"
 configure_permissions_ownership "$KUBESCAPE_ARTIFACTS_DIR" -g "root" -d "775" -f "664"

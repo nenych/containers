@@ -89,6 +89,7 @@ export PGPOOL_AUTHENTICATION_METHOD="${PGPOOL_AUTHENTICATION_METHOD:-scram-sha-2
 export PGPOOL_AES_KEY="${PGPOOL_AES_KEY:-$(head -c 20 /dev/urandom | base64)}"
 export PGPOOL_FAILOVER_ON_BACKEND_SHUTDOWN="${PGPOOL_FAILOVER_ON_BACKEND_SHUTDOWN:-on}"
 export PGPOOL_FAILOVER_ON_BACKEND_ERROR="${PGPOOL_FAILOVER_ON_BACKEND_ERROR:-off}"
+export PGPOOL_DISCARD_STATUS="${PGPOOL_DISCARD_STATUS:-yes}"
 
 # SSL
 export PGPOOL_ENABLE_TLS="${PGPOOL_ENABLE_TLS:-no}"
@@ -158,11 +159,12 @@ pgpool_validate() {
     if [[ -z "$PGPOOL_ADMIN_USERNAME" ]] || [[ -z "$PGPOOL_ADMIN_PASSWORD" ]]; then
         print_validation_error "The Pgpool administrator user's credentials are mandatory. Set the environment variables PGPOOL_ADMIN_USERNAME and PGPOOL_ADMIN_PASSWORD with the Pgpool administrator user's credentials."
     fi
+
     if [[ "$PGPOOL_SR_CHECK_PERIOD" -gt 0 ]] && { [[ -z "$PGPOOL_SR_CHECK_USER" ]] || [[ -z "$PGPOOL_SR_CHECK_PASSWORD" ]]; }; then
-        print_validation_error "The PostrgreSQL replication credentials are mandatory. Set the environment variables PGPOOL_SR_CHECK_USER and PGPOOL_SR_CHECK_PASSWORD with the PostrgreSQL replication credentials."
+        print_validation_error "The Streaming Replication Check credentials are mandatory. Set the environment variables PGPOOL_SR_CHECK_USER and PGPOOL_SR_CHECK_PASSWORD with the Streaming Replication Check credentials."
     fi
     if [[ -z "$PGPOOL_HEALTH_CHECK_USER" ]] || [[ -z "$PGPOOL_HEALTH_CHECK_PASSWORD" ]]; then
-        print_validation_error "The PostrgreSQL health check credentials are mandatory. Set the environment variables PGPOOL_HEALTH_CHECK_USER and PGPOOL_HEALTH_CHECK_PASSWORD with the PostrgreSQL health check credentials."
+        print_validation_error "The PostgreSQL health check credentials are mandatory. Set the environment variables PGPOOL_HEALTH_CHECK_USER and PGPOOL_HEALTH_CHECK_PASSWORD with the PostgreSQL health check credentials."
     fi
     if is_boolean_yes "$PGPOOL_ENABLE_LDAP" && { [[ -z "${LDAP_URI}" ]] || [[ -z "${LDAP_BASE}" ]] || [[ -z "${LDAP_BIND_DN}" ]] || [[ -z "${LDAP_BIND_PASSWORD}" ]]; }; then
         print_validation_error "The LDAP configuration is required when LDAP authentication is enabled. Set the environment variables LDAP_URI, LDAP_BASE, LDAP_BIND_DN and LDAP_BIND_PASSWORD with the LDAP configuration."
@@ -276,6 +278,15 @@ pgpool_validate() {
     [[ "$error_code" -eq 0 ]] || exit "$error_code"
 }
 
+########################
+# Attach a backend node to Pgpool-II
+# Globals:
+#   PGPOOL_*
+# Arguments:
+#   $1 - node id
+# Returns:
+#   None
+#########################
 pgpool_attach_node() {
     local -r node_id=${1:?node id is missing}
 
@@ -288,7 +299,7 @@ pgpool_attach_node() {
 }
 
 ########################
-# Check pgpool health and attached offline backends when they are online
+# Check Pgpool-II health and attached offline backends when they are online
 # Globals:
 #   PGPOOL_*
 # Arguments:
@@ -298,31 +309,39 @@ pgpool_attach_node() {
 #   1 when unhealthy
 #########################
 pgpool_healthcheck() {
-    info "Checking pgpool health..."
-    local backends
+    info "Checking Pgpool-II health..."
+    local backends node_id node_host node_port
+
     # Timeout should be in sync with liveness probe timeout and number of nodes which could be down together
-    # Only nodes marked UP in pgpool are tested. Each failed standby backend consumes up to PGPOOL_CONNECT_TIMEOUT
+    # Only nodes marked UP in Pgpool-II are tested. Each failed standby backend consumes up to PGPOOL_CONNECT_TIMEOUT
     # to test. Network split is worst-case scenario.
-    # NOTE: command blocks indefinitely if primary node is marked UP in pgpool but is DOWN in reality and connection
+    # NOTE: command blocks indefinitely if primary node is marked UP in Pgpool-II but is DOWN in reality and connection
     # times-out. Example is again network-split.
-    backends="$(PGCONNECT_TIMEOUT=$PGPOOL_HEALTH_CHECK_PSQL_TIMEOUT PGPASSWORD="$PGPOOL_POSTGRES_PASSWORD" \
+    if backends="$(PGCONNECT_TIMEOUT=$PGPOOL_HEALTH_CHECK_PSQL_TIMEOUT PGPASSWORD="$PGPOOL_POSTGRES_PASSWORD" \
         psql -U "$PGPOOL_POSTGRES_USERNAME" -d postgres -h "$PGPOOL_TMP_DIR" -p "$PGPOOL_PORT_NUMBER" \
-        -tA -c "SHOW pool_nodes;")" || backends="command failed"
-    if [[ "$backends" != "command failed" ]]; then
-        # look up backends that are marked offline and being up - attach only status=down and pg_status=up
-        # situation down|down means PG is not yet ready to be attached
-        for node in $(echo "${backends}" | grep "down|up" | tr -d ' '); do
+        -tA -c "SHOW pool_nodes;" 2> /dev/null)"; then
+        # We're not interested in nodes marked as down|down
+        backends="$(grep -v "down|down" <<< "$backends")"
+        # We should also check whether there are discrepancies between Pgpool-II and the actual primary node
+        if grep -e "standby|primary" -e "primary|standby" <<< "$backends" > /dev/null; then
+            error "Found inconsistencies in pgpool_status"
+            return 1
+        fi
+        # Look up backends that are marked offline but being up
+        read -r -a nodes_to_attach <<< "$(grep "down|up" <<< "$backends" | tr -d ' ' | tr '\n' ' ')"
+        for node in "${nodes_to_attach[@]}"; do
             IFS="|" read -ra node_info <<< "$node"
-            local node_id="${node_info[0]}"
-            local node_host="${node_info[1]}"
+            node_id="${node_info[0]}"
+            node_host="${node_info[1]}"
+            node_port="${node_info[2]}"
             if [[ $(PGCONNECT_TIMEOUT=3 PGPASSWORD="${PGPOOL_POSTGRES_PASSWORD}" psql -U "${PGPOOL_POSTGRES_USERNAME}" \
-                -d postgres -h "${node_host}" -p "${PGPOOL_PORT_NUMBER}" -tA -c "SELECT 1" || true) == 1 ]]; then
-                # attach backend if it has come back online
-                pgpool_attach_node "${node_id}"
+                -d postgres -h "${node_host}" -p "${node_port}" -tA -c "SELECT 1" || true) == 1 ]]; then
+                # Attach backend if it has come back online
+                pgpool_attach_node "$node_id"
             fi
         done
     else
-        # backends command failed
+        error "unable to list pool nodes"
         return 1
     fi
 }
@@ -338,17 +357,16 @@ pgpool_healthcheck() {
 #########################
 pgpool_create_pghba() {
     local all_authentication="$PGPOOL_AUTHENTICATION_METHOD"
-    local postgres_authentication="$all_authentication"
     is_boolean_yes "$PGPOOL_ENABLE_LDAP" && all_authentication="pam pamservice=pgpool"
     local postgres_auth_line=""
     local sr_check_auth_line=""
     info "Generating pg_hba.conf file..."
 
     if is_boolean_yes "$PGPOOL_ENABLE_POOL_PASSWD"; then
-        postgres_auth_line="host     all             ${PGPOOL_POSTGRES_USERNAME}       all         ${postgres_authentication}"
+        postgres_auth_line="host     all             ${PGPOOL_POSTGRES_USERNAME}       all        ${PGPOOL_AUTHENTICATION_METHOD}"
     fi
     if [[ -n "$PGPOOL_SR_CHECK_USER" ]]; then
-        sr_check_auth_line="host     all             ${PGPOOL_SR_CHECK_USER}       all         trust"
+        sr_check_auth_line="host     all             ${PGPOOL_SR_CHECK_USER}            all        ${PGPOOL_AUTHENTICATION_METHOD}"
     fi
 
     cat >>"$PGPOOL_PGHBA_FILE" <<EOF
@@ -365,8 +383,6 @@ EOF
     cat >>"$PGPOOL_PGHBA_FILE" <<EOF
 ${sr_check_auth_line}
 ${postgres_auth_line}
-host     all             wide               all         trust
-host     all             pop_user           all         trust
 host     all             all                all         ${all_authentication}
 EOF
 }
@@ -427,7 +443,7 @@ EOF
 }
 
 ########################
-#  Create basic pgpool.conf file using the example provided in the etc/ folder
+# Create basic pgpool.conf file using the example provided in the etc/ folder
 # Globals:
 #   PGPOOL_*
 # Arguments:
@@ -493,7 +509,7 @@ pgpool_create_config() {
     # Streaming Replication Check settings
     # https://www.pgpool.net/docs/latest/en/html/runtime-streaming-replication-check.html
     pgpool_set_property "sr_check_user" "$PGPOOL_SR_CHECK_USER"
-    pgpool_set_property "sr_check_password" "$PGPOOL_SR_CHECK_PASSWORD"
+    pgpool_set_property "sr_check_password" "$(pgpool_encrypt_password ${PGPOOL_SR_CHECK_PASSWORD})"
     pgpool_set_property "sr_check_period" "$PGPOOL_SR_CHECK_PERIOD"
     pgpool_set_property "sr_check_database" "$PGPOOL_SR_CHECK_DATABASE"
     # Healthcheck per node settings
@@ -501,7 +517,7 @@ pgpool_create_config() {
     pgpool_set_property "health_check_period" "$PGPOOL_HEALTH_CHECK_PERIOD"
     pgpool_set_property "health_check_timeout" "$PGPOOL_HEALTH_CHECK_TIMEOUT"
     pgpool_set_property "health_check_user" "$PGPOOL_HEALTH_CHECK_USER"
-    pgpool_set_property "health_check_password" "$PGPOOL_HEALTH_CHECK_PASSWORD"
+    pgpool_set_property "health_check_password" "$(pgpool_encrypt_password ${PGPOOL_HEALTH_CHECK_PASSWORD})"
     pgpool_set_property "health_check_max_retries" "$PGPOOL_HEALTH_CHECK_MAX_RETRIES"
     pgpool_set_property "health_check_retry_delay" "$PGPOOL_HEALTH_CHECK_RETRY_DELAY"
     pgpool_set_property "connect_timeout" "$PGPOOL_CONNECT_TIMEOUT"
@@ -549,6 +565,32 @@ pgpool_create_config() {
 }
 
 ########################
+# Execute postgresql encrypt command
+# Globals:
+#   PGPOOL_*
+# Arguments:
+#   $@ - Command to execute
+# Returns:
+#   String
+#########################
+pgpool_encrypt_execute() {
+    local -a password_encryption_cmd=("pg_md5")
+
+    if [[ "$PGPOOL_AUTHENTICATION_METHOD" = "scram-sha-256" ]]; then
+
+        if is_file_writable "$PGPOOLKEYFILE"; then
+            # Creating a PGPOOLKEYFILE as it is writeable
+            echo "$PGPOOL_AES_KEY" > "$PGPOOLKEYFILE"
+            # Fix permissions for PGPOOLKEYFILE
+            chmod 0600 "$PGPOOLKEYFILE"
+        fi
+        password_encryption_cmd=("pg_enc" "--key-file=${PGPOOLKEYFILE}")
+    fi
+
+    "${password_encryption_cmd[@]}" "$@"
+}
+
+########################
 # Generates a password file for local authentication
 # Globals:
 #   PGPOOL_*
@@ -561,20 +603,10 @@ pgpool_generate_password_file() {
     if is_boolean_yes "$PGPOOL_ENABLE_POOL_PASSWD"; then
         info "Generating password file for local authentication..."
 
-        local -a password_encryption_cmd=("pg_md5")
-
-        if [[ "$PGPOOL_AUTHENTICATION_METHOD" = "scram-sha-256" ]]; then
-
-            if is_file_writable "$PGPOOLKEYFILE"; then
-                # Creating a PGPOOLKEYFILE as it is writeable
-                echo "$PGPOOL_AES_KEY" > "$PGPOOLKEYFILE"
-                # Fix permissions for PGPOOLKEYFILE
-                chmod 0600 "$PGPOOLKEYFILE"
-            fi
-            password_encryption_cmd=("pg_enc" "--key-file=${PGPOOLKEYFILE}")
+        debug_execute pgpool_encrypt_execute -m --config-file="$PGPOOL_CONF_FILE" -u "$PGPOOL_POSTGRES_USERNAME" "$PGPOOL_POSTGRES_PASSWORD"
+        if [[ -n "$PGPOOL_SR_CHECK_USER" ]]; then
+            debug_execute pgpool_encrypt_execute -m --config-file="$PGPOOL_CONF_FILE" -u "$PGPOOL_SR_CHECK_USER" "$PGPOOL_SR_CHECK_PASSWORD"
         fi
-
-        debug_execute "${password_encryption_cmd[@]}" -m --config-file="$PGPOOL_CONF_FILE" -u "$PGPOOL_POSTGRES_USERNAME" "$PGPOOL_POSTGRES_PASSWORD"
 
         if [[ -n "${PGPOOL_POSTGRES_CUSTOM_USERS}" ]]; then
             read -r -a custom_users_list <<<"$(tr ',;' ' ' <<<"${PGPOOL_POSTGRES_CUSTOM_USERS}")"
@@ -582,12 +614,31 @@ pgpool_generate_password_file() {
 
             local index=0
             for user in "${custom_users_list[@]}"; do
-                debug_execute "${password_encryption_cmd[@]}" -m --config-file="$PGPOOL_CONF_FILE" -u "$user" "${custom_passwords_list[$index]}"
+                debug_execute pgpool_encrypt_execute -m --config-file="$PGPOOL_CONF_FILE" -u "$user" "${custom_passwords_list[$index]}"
                 ((index += 1))
             done
         fi
     else
         info "Skip generating password file due to PGPOOL_ENABLE_POOL_PASSWD = no"
+    fi
+}
+
+########################
+# Encrypts a password
+# Globals:
+#   PGPOOL_*
+# Arguments:
+#   $1 - password
+# Returns:
+#   String
+#########################
+pgpool_encrypt_password() {
+    local -r password="${1:?missing password}"
+
+    if [[ "$PGPOOL_AUTHENTICATION_METHOD" = "scram-sha-256" ]]; then
+        pgpool_encrypt_execute "$password" | grep -o -E "AES.+" | tr -d '\n'
+    else
+        pgpool_encrypt_execute "$password" | tr -d '\n'
     fi
 }
 

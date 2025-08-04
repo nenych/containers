@@ -4,7 +4,7 @@
 
 > Moodle&trade; LMS is an open source online Learning Management System widely used at universities, schools, and corporations. It is modular and highly adaptable to any type of online learning.
 
-[Overview of Bitnami LMS powered by Moodle&trade; LMS](http://moodle.org/)
+[Overview of Bitnami LMS powered by Moodle&trade; LMS](https://moodle.org/)
 Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide commercial license of any of these products. This listing has an open source license. Moodle(TM) LMS is run and maintained by Moodle HQ, that is a completely and separate project from Bitnami.
 
 ## TL;DR
@@ -15,26 +15,35 @@ docker run --name moodle bitnami/moodle:latest
 
 **Warning**: This quick setup is only intended for development environments. You are encouraged to change the insecure default credentials and check out the available configuration options in the [Environment Variables](#environment-variables) section for a more secure deployment.
 
-## Why use Bitnami Images?
+## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
 
-* Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
-* With Bitnami images the latest bug fixes and features are available as soon as possible.
-* Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [**minideb**](https://github.com/bitnami/minideb) -a minimalist Debian based container image that gives you a small base container image and the familiarity of a leading Linux distribution- or **scratch** -an explicitly empty image-.
-* All Bitnami images available in Docker Hub are signed with [Notation](https://notaryproject.dev/). [Check this post](https://blog.bitnami.com/2024/03/bitnami-packaged-containers-and-helm.html) to know how to verify the integrity of the images.
-* Bitnami container images are released on a regular basis with the latest distribution packages available.
+Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
 
-Looking to use Bitnami LMS powered by Moodle&trade; LMS in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+- Granting community users access for the first time to security-optimized versions of popular container images.
+- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
+## Why use Bitnami Secure Images?
+
+- Bitnami Secure Images and Helm charts are built to make open source more secure and enterprise ready.
+- Triage security vulnerabilities faster, with transparency into CVE risks using industry standard Vulnerability Exploitability Exchange (VEX), KEV, and EPSS scores.
+- Our hardened images use a minimal OS (Photon Linux), which reduces the attack surface while maintaining extensibility through the use of an industry standard package format.
+- Stay more secure and compliant with continuously built images updated within hours of upstream patches.
+- Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
+- Hardened images come with attestation signatures (Notation), SBOMs, virus scan reports and other metadata produced in an SLSA-3 compliant software factory.
+
+Only a subset of BSI applications are available for free. Looking to access the entire catalog of applications as well as enterprise support? Try the [commercial edition of Bitnami Secure Images today](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/).
 
 ## How to deploy Moodle&trade; in Kubernetes?
 
 Deploying Bitnami applications as Helm Charts is the easiest way to get started with our applications on Kubernetes. Read more about the installation in the [Bitnami Chart for Moodle&trade; GitHub repository](https://github.com/bitnami/charts/tree/master/bitnami/moodle).
 
-Bitnami containers can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Supported tags and respective `Dockerfile` links
 
-Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html).
+Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html).
 
 You can see the equivalence between the different tags by taking a look at the `tags-info.yaml` file present in the branch folder, i.e `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`.
 
@@ -135,15 +144,15 @@ This requires a minor change to the [`docker-compose.yml`](https://github.com/bi
    mariadb:
      ...
      volumes:
--      - 'mariadb_data:/bitnami/mariadb'
+-      - mariadb_data:/bitnami/mariadb
 +      - /path/to/mariadb-persistence:/bitnami/mariadb
    ...
    moodle:
      ...
      volumes:
--      - 'moodle_data:/bitnami/moodle'
+-      - moodle_data:/bitnami/moodle
 +      - /path/to/moodle-persistence:/bitnami/moodle
--      - 'moodledata_data:/bitnami/moodledata'
+-      - moodledata_data:/bitnami/moodledata
 +      - /path/to/moodledata-persistence:/bitnami/moodle
    ...
 -volumes:
@@ -235,7 +244,7 @@ docker run -d --name moodle \
 
 When you start the Moodle&trade; image, you can adjust the configuration of the instance by passing one or more environment variables either on the docker-compose file or on the `docker run` command line. If you want to add a new environment variable:
 
-* For docker-compose add the variable name and value under the application section in the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/moodle/docker-compose.yml) file present in this repository:
+- For docker-compose add the variable name and value under the application section in the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/moodle/docker-compose.yml) file present in this repository:
 
 ```yaml
 moodle:
@@ -245,7 +254,7 @@ moodle:
   ...
 ```
 
-* For manual execution add a `--env` option with each variable and value:
+- For manual execution add a `--env` option with each variable and value:
 
   ```console
   docker run -d --name moodle -p 80:8080 -p 443:8443 \
@@ -260,7 +269,7 @@ moodle:
 
 This would be an example of SMTP configuration using a Gmail account:
 
-* Modify the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/moodle/docker-compose.yml) file present in this repository:
+- Modify the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/moodle/docker-compose.yml) file present in this repository:
 
   ```yaml
   moodle:
@@ -277,7 +286,7 @@ This would be an example of SMTP configuration using a Gmail account:
   ...
   ```
 
-* For manual execution:
+- For manual execution:
 
   ```console
   docker run -d --name moodle -p 80:8080 -p 443:8443 \
@@ -296,7 +305,7 @@ This would be an example of SMTP configuration using a Gmail account:
 
 This would be an instance ready to be put behind the NGINX load balancer.
 
-* Modify the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/moodle/docker-compose.yml) file present in this repository:
+- Modify the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/moodle/docker-compose.yml) file present in this repository:
 
   ```yaml
   moodle:
@@ -308,7 +317,7 @@ This would be an instance ready to be put behind the NGINX load balancer.
   ...
   ```
 
-* For manual execution:
+- For manual execution:
 
   ```console
   docker run -d --name moodle -p 80:8080 -p 443:8443 \
@@ -339,12 +348,12 @@ fr_FR.UTF-8 UTF-8, de_DE.UTF-8 UTF-8, it_IT.UTF-8 UTF-8, es_ES.UTF-8 UTF-8
 
 To use `EXTRA_LOCALES`, you have two options:
 
-* Modify the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/moodle/docker-compose.yml) file present in this repository:
+- Modify the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/moodle/docker-compose.yml) file present in this repository:
 
   ```yaml
   moodle:
   ...
-    # image: 'bitnami/moodle:latest' # remove this line !
+    # image: bitnami/moodle:latest # remove this line !
     build:
       context: .
       dockerfile: Dockerfile
@@ -353,7 +362,7 @@ To use `EXTRA_LOCALES`, you have two options:
   ...
   ```
 
-* For manual execution, clone the repository and run the following command inside the `X/debian-12` directory:
+- For manual execution, clone the repository and run the following command inside the `X/debian-12` directory:
 
   ```console
   docker build -t bitnami/moodle:latest --build-arg EXTRA_LOCALES="fr_FR.UTF-8 UTF-8, de_DE.UTF-8 UTF-8, it_IT.UTF-8 UTF-8, es_ES.UTF-8 UTF-8" .
@@ -365,12 +374,12 @@ You can generate all supported locales by setting the build environment variable
 
 To use `WITH_ALL_LOCALES`, you have two options:
 
-* Modify the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/moodle/docker-compose.yml) file present in this repository:
+- Modify the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/moodle/docker-compose.yml) file present in this repository:
 
   ```yaml
   moodle:
   ...
-    # image: 'bitnami/moodle:latest' # remove this line !
+    # image: bitnami/moodle:latest # remove this line !
     build:
       context: .
       dockerfile: Dockerfile
@@ -379,7 +388,7 @@ To use `WITH_ALL_LOCALES`, you have two options:
   ...
   ```
 
-* For manual execution, clone the repository and run the following command inside the `X/debian-12` directory:
+- For manual execution, clone the repository and run the following command inside the `X/debian-12` directory:
 
   ```console
   docker build -t bitnami/moodle:latest --build-arg WITH_ALL_LOCALES=yes .
@@ -516,10 +525,10 @@ The Bitnami Docker image for Moodle&trade; is designed to be extended so it can 
 
 Before extending this image, please note there are certain configuration settings you can modify using the original image:
 
-* Settings that can be adapted using environment variables. For instance, you can change the ports used by Apache for HTTP and HTTPS, by setting the environment variables `APACHE_HTTP_PORT_NUMBER` and `APACHE_HTTPS_PORT_NUMBER` respectively.
-* [Adding custom virtual hosts](https://github.com/bitnami/containers/blob/main/bitnami/apache#adding-custom-virtual-hosts).
-* [Replacing the 'httpd.conf' file](https://github.com/bitnami/containers/blob/main/bitnami/apache#full-configuration).
-* [Using custom SSL certificates](https://github.com/bitnami/containers/blob/main/bitnami/apache#using-custom-ssl-certificates).
+- Settings that can be adapted using environment variables. For instance, you can change the ports used by Apache for HTTP and HTTPS, by setting the environment variables `APACHE_HTTP_PORT_NUMBER` and `APACHE_HTTPS_PORT_NUMBER` respectively.
+- [Adding custom virtual hosts](https://github.com/bitnami/containers/blob/main/bitnami/apache#adding-custom-virtual-hosts).
+- [Replacing the 'httpd.conf' file](https://github.com/bitnami/containers/blob/main/bitnami/apache#full-configuration).
+- [Using custom SSL certificates](https://github.com/bitnami/containers/blob/main/bitnami/apache#using-custom-ssl-certificates).
 
 If your desired customizations cannot be covered using the methods mentioned above, extend the image. To do so, create your own image using a Dockerfile with the format below:
 
@@ -531,9 +540,9 @@ FROM bitnami/moodle
 
 Here is an example of extending the image with the following modifications:
 
-* Install the `vim` editor
-* Modify the Apache configuration file
-* Modify the ports used by Apache
+- Install the `vim` editor
+- Modify the Apache configuration file
+- Modify the ports used by Apache
 
 ```Dockerfile
 FROM bitnami/moodle
@@ -558,10 +567,10 @@ Based on the extended image, you can update the [`docker-compose.yml`](https://g
 -    image: bitnami/moodle:latest
 +    build: .
      ports:
--      - '80:8080'
--      - '443:8443'
-+      - '80:8181'
-+      - '443:8143'
+-      - 80:8080
+-      - 443:8443
++      - 80:8181
++      - 443:8143
      environment:
        ...
 +      - PHP_MEMORY_LIMIT=512m
@@ -572,22 +581,22 @@ Based on the extended image, you can update the [`docker-compose.yml`](https://g
 
 ## 3.9.0-debian-10-r17
 
-* The size of the container image has been decreased.
-* The configuration logic is now based on Bash scripts in the *rootfs/* folder.
-* The Moodle&trade; container now supports the "non-root" user approach, but it still runs as the `root` user by default. When running as a non-root user, all services will be run under the same user and Cron jobs will be disabled as crond requires to be run as a superuser. To run as a non-root user, change `USER root` to `USER 1001` in the Dockerfile, or specify `user: 1001` in `docker-compose.yml`. Related changes:
-  * The HTTP/HTTPS ports exposed by the container are now `8080/8443` instead of `80/443`.
-  * Backwards compatibility is not guaranteed when data is persisted using docker or docker-compose. We highly recommend migrating the Moodle&trade; site by exporting its content, and importing it on a new Moodle&trade; container.
+- The size of the container image has been decreased.
+- The configuration logic is now based on Bash scripts in the *rootfs/* folder.
+- The Moodle&trade; container now supports the "non-root" user approach, but it still runs as the `root` user by default. When running as a non-root user, all services will be run under the same user and Cron jobs will be disabled as crond requires to be run as a superuser. To run as a non-root user, change `USER root` to `USER 1001` in the Dockerfile, or specify `user: 1001` in `docker-compose.yml`. Related changes:
+  - The HTTP/HTTPS ports exposed by the container are now `8080/8443` instead of `80/443`.
+  - Backwards compatibility is not guaranteed when data is persisted using docker or docker-compose. We highly recommend migrating the Moodle&trade; site by exporting its content, and importing it on a new Moodle&trade; container.
 
 ## 3.7.1-debian-9-r38 and 3.7.1-ol-7-r40
 
-* It is now possible to use existing Moodle&trade; databases from other installations. In order to do this, use the environment variable `MOODLE_SKIP_INSTALL`, which forces the container not to run the initial Moodle&trade; setup wizard.
+- It is now possible to use existing Moodle&trade; databases from other installations. In order to do this, use the environment variable `MOODLE_SKIP_INSTALL`, which forces the container not to run the initial Moodle&trade; setup wizard.
 
 ## 3.7.0-debian-9-r12 and 3.7.0-ol-7-r13
 
-* This image has been adapted so it's easier to customize. See the [Customize this image](#customize-this-image) section for more information.
-* The Apache configuration volume (`/bitnami/apache`) has been deprecated, and support for this feature will be dropped in the near future. Until then, the container will enable the Apache configuration from that volume if it exists. By default, and if the configuration volume does not exist, the configuration files will be regenerated each time the container is created. Users wanting to apply custom Apache configuration files are advised to mount a volume for the configuration at `/opt/bitnami/apache/conf`, or mount specific configuration files individually.
-* The PHP configuration volume (`/bitnami/php`) has been deprecated, and support for this feature will be dropped in the near future. Until then, the container will enable the PHP configuration from that volume if it exists. By default, and if the configuration volume does not exist, the configuration files will be regenerated each time the container is created. Users wanting to apply custom PHP configuration files are advised to mount a volume for the configuration at `/opt/bitnami/php/conf`, or mount specific configuration files individually.
-* Enabling custom Apache certificates by placing them at `/opt/bitnami/apache/certs` has been deprecated, and support for this functionality will be dropped in the near future. Users wanting to enable custom certificates are advised to mount their certificate files on top of the preconfigured ones at `/certs`.
+- This image has been adapted so it's easier to customize. See the [Customize this image](#customize-this-image) section for more information.
+- The Apache configuration volume (`/bitnami/apache`) has been deprecated, and support for this feature will be dropped in the near future. Until then, the container will enable the Apache configuration from that volume if it exists. By default, and if the configuration volume does not exist, the configuration files will be regenerated each time the container is created. Users wanting to apply custom Apache configuration files are advised to mount a volume for the configuration at `/opt/bitnami/apache/conf`, or mount specific configuration files individually.
+- The PHP configuration volume (`/bitnami/php`) has been deprecated, and support for this feature will be dropped in the near future. Until then, the container will enable the PHP configuration from that volume if it exists. By default, and if the configuration volume does not exist, the configuration files will be regenerated each time the container is created. Users wanting to apply custom PHP configuration files are advised to mount a volume for the configuration at `/opt/bitnami/php/conf`, or mount specific configuration files individually.
+- Enabling custom Apache certificates by placing them at `/opt/bitnami/apache/certs` has been deprecated, and support for this functionality will be dropped in the near future. Users wanting to enable custom certificates are advised to mount their certificate files on top of the preconfigured ones at `/certs`.
 
 ## Contributing
 
@@ -599,7 +608,7 @@ If you encountered a problem running this container, you can file an [issue](htt
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

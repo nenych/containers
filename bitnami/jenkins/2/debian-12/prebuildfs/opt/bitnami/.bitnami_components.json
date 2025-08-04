@@ -1,20 +1,20 @@
 {
-    "java": {
-        "arch": "amd64",
-        "distro": "debian-12",
-        "type": "NAMI",
-        "version": "17.0.12-10-1"
-    },
     "jenkins": {
         "arch": "amd64",
         "distro": "debian-12",
         "type": "NAMI",
-        "version": "2.462.1-0"
+        "version": "2.516.1-1"
+    },
+    "jre": {
+        "arch": "amd64",
+        "distro": "debian-12",
+        "type": "NAMI",
+        "version": "21.0.8-12-0"
     },
     "render-template": {
         "arch": "amd64",
         "distro": "debian-12",
         "type": "NAMI",
-        "version": "1.0.7-3"
+        "version": "1.0.8-1"
     }
 }

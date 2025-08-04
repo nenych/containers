@@ -1,14 +1,14 @@
 {
-    "java": {
+    "jre": {
         "arch": "amd64",
         "distro": "debian-12",
         "type": "NAMI",
-        "version": "17.0.12-10-1"
+        "version": "17.0.16-12-0"
     },
     "solr": {
         "arch": "amd64",
         "distro": "debian-12",
         "type": "NAMI",
-        "version": "9.6.1-0"
+        "version": "9.9.0-0"
     }
 }

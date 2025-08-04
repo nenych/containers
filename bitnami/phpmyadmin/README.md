@@ -17,26 +17,35 @@ docker run --name phpmyadmin bitnami/phpmyadmin:latest
 
 You can find the default credentials and available configuration options in the [Environment Variables](#environment-variables) section.
 
-## Why use Bitnami Images?
+## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
 
-* Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
-* With Bitnami images the latest bug fixes and features are available as soon as possible.
-* Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [**minideb**](https://github.com/bitnami/minideb) -a minimalist Debian based container image that gives you a small base container image and the familiarity of a leading Linux distribution- or **scratch** -an explicitly empty image-.
-* All Bitnami images available in Docker Hub are signed with [Notation](https://notaryproject.dev/). [Check this post](https://blog.bitnami.com/2024/03/bitnami-packaged-containers-and-helm.html) to know how to verify the integrity of the images.
-* Bitnami container images are released on a regular basis with the latest distribution packages available.
+Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
 
-Looking to use phpMyAdmin in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+- Granting community users access for the first time to security-optimized versions of popular container images.
+- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
+## Why use Bitnami Secure Images?
+
+- Bitnami Secure Images and Helm charts are built to make open source more secure and enterprise ready.
+- Triage security vulnerabilities faster, with transparency into CVE risks using industry standard Vulnerability Exploitability Exchange (VEX), KEV, and EPSS scores.
+- Our hardened images use a minimal OS (Photon Linux), which reduces the attack surface while maintaining extensibility through the use of an industry standard package format.
+- Stay more secure and compliant with continuously built images updated within hours of upstream patches.
+- Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
+- Hardened images come with attestation signatures (Notation), SBOMs, virus scan reports and other metadata produced in an SLSA-3 compliant software factory.
+
+Only a subset of BSI applications are available for free. Looking to access the entire catalog of applications as well as enterprise support? Try the [commercial edition of Bitnami Secure Images today](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/).
 
 ## How to deploy phpMyAdmin in Kubernetes?
 
 Deploying Bitnami applications as Helm Charts is the easiest way to get started with our applications on Kubernetes. Read more about the installation in the [Bitnami phpMyAdmin Chart GitHub repository](https://github.com/bitnami/charts/tree/master/bitnami/phpmyadmin).
 
-Bitnami containers can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Supported tags and respective `Dockerfile` links
 
-Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html).
+Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html).
 
 You can see the equivalence between the different tags by taking a look at the `tags-info.yaml` file present in the branch folder, i.e `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`.
 
@@ -151,18 +160,18 @@ The `bitnami/phpmyadmin:latest` tag always points to the most recent release. To
 
 2. Stop your container
 
-    * For docker-compose: `$ docker-compose stop phpmyadmin`
-    * For manual execution: `$ docker stop phpmyadmin`
+    - For docker-compose: `$ docker-compose stop phpmyadmin`
+    - For manual execution: `$ docker stop phpmyadmin`
 
 3. Remove the currently running container
 
-    * For docker-compose: `$ docker-compose rm -v phpmyadmin`
-    * For manual execution: `$ docker rm -v phpmyadmin`
+    - For docker-compose: `$ docker-compose rm -v phpmyadmin`
+    - For manual execution: `$ docker rm -v phpmyadmin`
 
 4. Run the new image
 
-    * For docker-compose: `$ docker-compose up phpmyadmin`
-    * For manual execution: `docker run --name phpmyadmin bitnami/phpmyadmin:latest`
+    - For docker-compose: `$ docker-compose up phpmyadmin`
+    - For manual execution: `docker run --name phpmyadmin bitnami/phpmyadmin:latest`
 
 ## Configuration
 
@@ -175,6 +184,8 @@ The `bitnami/phpmyadmin:latest` tag always points to the most recent release. To
 | `PHPMYADMIN_ALLOW_ARBITRARY_SERVER`    | Whether to enable database server hostname.                                                                                                                          | `nil`                                          |
 | `PHPMYADMIN_ALLOW_REMOTE_CONNECTIONS`  | Whether to allow remote connections for phpMyAdmin, or force local connections by default.                                                                           | `$PHPMYADMIN_DEFAULT_ALLOW_REMOTE_CONNECTIONS` |
 | `PHPMYADMIN_ABSOLUTE_URI`              | If specified, absolute URL to phpMyAdmin when generating links.                                                                                                      | `nil`                                          |
+| `PHPMYADMIN_EXEC_TIME_LIMIT`           | If specified, number of seconds a script is allowed to run                                                                                                           | `nil`                                          |
+| `PHPMYADMIN_MEMORY_LIMIT`              | If specified, number of bytes a script is allowed to allocate.                                                                                                       | `nil`                                          |
 | `DATABASE_HOST`                        | Database server host.                                                                                                                                                | `nil`                                          |
 | `DATABASE_USER`                        | Database server user.                                                                                                                                                | `nil`                                          |
 | `DATABASE_PASSWORD`                    | Database server password.                                                                                                                                            | `nil`                                          |
@@ -251,10 +262,10 @@ The Bitnami phpMyAdmin Docker image is designed to be extended so it can be used
 
 Before extending this image, please note there are certain configuration settings you can modify using the original image:
 
-* Settings that can be adapted using environment variables. For instance, you can change the ports used by Apache for HTTP and HTTPS, by setting the environment variables `APACHE_HTTP_PORT_NUMBER` and `APACHE_HTTPS_PORT_NUMBER` respectively.
-* [Adding custom virtual hosts](https://github.com/bitnami/containers/blob/main/bitnami/apache#adding-custom-virtual-hosts).
-* [Replacing the 'httpd.conf' file](https://github.com/bitnami/containers/blob/main/bitnami/apache#full-configuration).
-* [Using custom SSL certificates](https://github.com/bitnami/containers/blob/main/bitnami/apache#using-custom-ssl-certificates).
+- Settings that can be adapted using environment variables. For instance, you can change the ports used by Apache for HTTP and HTTPS, by setting the environment variables `APACHE_HTTP_PORT_NUMBER` and `APACHE_HTTPS_PORT_NUMBER` respectively.
+- [Adding custom virtual hosts](https://github.com/bitnami/containers/blob/main/bitnami/apache#adding-custom-virtual-hosts).
+- [Replacing the 'httpd.conf' file](https://github.com/bitnami/containers/blob/main/bitnami/apache#full-configuration).
+- [Using custom SSL certificates](https://github.com/bitnami/containers/blob/main/bitnami/apache#using-custom-ssl-certificates).
 
 If your desired customizations cannot be covered using the methods mentioned above, extend the image. To do so, create your own image using a Dockerfile with the format below:
 
@@ -266,10 +277,10 @@ FROM bitnami/phpmyadmin
 
 Here is an example of extending the image with the following modifications:
 
-* Install the `vim` editor
-* Modify the Apache configuration file
-* Modify the ports used by Apache
-* Modify the default container user
+- Install the `vim` editor
+- Modify the Apache configuration file
+- Modify the ports used by Apache
+- Modify the default container user
 
 ```Dockerfile
 FROM bitnami/phpmyadmin
@@ -300,20 +311,20 @@ Based on the extended image, you can use a Docker Compose file like the one belo
 version: '2'
 services:
   mariadb:
-    image: 'bitnami/mariadb:10.11'
+    image: bitnami/mariadb:latest
     environment:
       - MARIADB_ROOT_PASSWORD=bitnami
     volumes:
-      - 'mariadb_data:/bitnami/mariadb'
+      - mariadb_data:/bitnami/mariadb
   phpmyadmin:
     build: .
     ports:
-      - '80:8181'
-      - '443:8143'
+      - 80:8181
+      - 443:8143
     depends_on:
       - mariadb
     volumes:
-      - 'phpmyadmin_data:/bitnami/mariadb'
+      - phpmyadmin_data:/bitnami/mariadb
 volumes:
   mariadb_data:
     driver: local
@@ -325,16 +336,16 @@ volumes:
 
 ### 5.0.2-debian-10-r73
 
-* Decrease the size of the container. The configuration logic is now based on Bash scripts in the `rootfs/` folder.
-* The `PHPMYADMIN_ALLOW_NO_PASSWORD` environment variable has been deprecated in favor of `DATABASE_ALLOW_NO_PASSWORD`.
-* New environment variables have been added to support configuring extra PHP options: `PHP_UPLOAD_MAX_FILESIZE` for `upload_max_filesize`, and `PHP_POST_MAX_SIZE` for `post_max_size`.
+- Decrease the size of the container. The configuration logic is now based on Bash scripts in the `rootfs/` folder.
+- The `PHPMYADMIN_ALLOW_NO_PASSWORD` environment variable has been deprecated in favor of `DATABASE_ALLOW_NO_PASSWORD`.
+- New environment variables have been added to support configuring extra PHP options: `PHP_UPLOAD_MAX_FILESIZE` for `upload_max_filesize`, and `PHP_POST_MAX_SIZE` for `post_max_size`.
 
 ### 4.8.5-debian-9-r96 and 4.8.5-ol-7-r111
 
-* This image has been adapted so it's easier to customize. See the [Customize this image](#customize-this-image) section for more information.
-* The Apache configuration volume (`/bitnami/apache`) has been deprecated, and support for this feature will be dropped in the near future. Until then, the container will enable the Apache configuration from that volume if it exists. By default, and if the configuration volume does not exist, the configuration files will be regenerated each time the container is created. Users wanting to apply custom Apache configuration files are advised to mount a volume for the configuration at `/opt/bitnami/apache/conf`, or mount specific configuration files individually.
-* The PHP configuration volume (`/bitnami/php`) has been deprecated, and support for this feature will be dropped in the near future. Until then, the container will enable the PHP configuration from that volume if it exists. By default, and if the configuration volume does not exist, the configuration files will be regenerated each time the container is created. Users wanting to apply custom PHP configuration files are advised to mount a volume for the configuration at `/opt/bitnami/php/conf`, or mount specific configuration files individually.
-* Enabling custom Apache certificates by placing them at `/opt/bitnami/apache/certs` has been deprecated, and support for this functionality will be dropped in the near future. Users wanting to enable custom certificates are advised to mount their certificate files on top of the preconfigured ones at `/certs`.
+- This image has been adapted so it's easier to customize. See the [Customize this image](#customize-this-image) section for more information.
+- The Apache configuration volume (`/bitnami/apache`) has been deprecated, and support for this feature will be dropped in the near future. Until then, the container will enable the Apache configuration from that volume if it exists. By default, and if the configuration volume does not exist, the configuration files will be regenerated each time the container is created. Users wanting to apply custom Apache configuration files are advised to mount a volume for the configuration at `/opt/bitnami/apache/conf`, or mount specific configuration files individually.
+- The PHP configuration volume (`/bitnami/php`) has been deprecated, and support for this feature will be dropped in the near future. Until then, the container will enable the PHP configuration from that volume if it exists. By default, and if the configuration volume does not exist, the configuration files will be regenerated each time the container is created. Users wanting to apply custom PHP configuration files are advised to mount a volume for the configuration at `/opt/bitnami/php/conf`, or mount specific configuration files individually.
+- Enabling custom Apache certificates by placing them at `/opt/bitnami/apache/certs` has been deprecated, and support for this functionality will be dropped in the near future. Users wanting to enable custom certificates are advised to mount their certificate files on top of the preconfigured ones at `/certs`.
 
 ## Contributing
 
@@ -346,7 +357,7 @@ If you encountered a problem running this container, you can file an [issue](htt
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

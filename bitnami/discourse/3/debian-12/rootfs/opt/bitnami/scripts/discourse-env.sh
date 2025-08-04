@@ -63,6 +63,7 @@ discourse_env_vars=(
     DISCOURSE_REDIS_PASSWORD
     DISCOURSE_REDIS_DB
     DISCOURSE_REDIS_USE_SSL
+    DISCOURSE_REDIS_DB
     DISCOURSE_HOSTNAME
     DISCOURSE_SKIP_INSTALL
     SMTP_HOST
@@ -82,6 +83,7 @@ discourse_env_vars=(
     REDIS_PASSWORD
     REDIS_DB
     REDIS_USE_SSL
+    REDIS_DB
 )
 for env_var in "${discourse_env_vars[@]}"; do
     file_env_var="${env_var}_FILE"
@@ -178,5 +180,7 @@ DISCOURSE_REDIS_DB="${DISCOURSE_REDIS_DB:-"${REDIS_DB:-}"}"
 export DISCOURSE_REDIS_DB="${DISCOURSE_REDIS_DB:-0}"
 DISCOURSE_REDIS_USE_SSL="${DISCOURSE_REDIS_USE_SSL:-"${REDIS_USE_SSL:-}"}"
 export DISCOURSE_REDIS_USE_SSL="${DISCOURSE_REDIS_USE_SSL:-no}"
+DISCOURSE_REDIS_DB="${DISCOURSE_REDIS_DB:-"${REDIS_DB:-}"}"
+export DISCOURSE_REDIS_DB="${DISCOURSE_REDIS_DB:-0}"
 
 # Custom environment variables may be defined below

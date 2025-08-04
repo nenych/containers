@@ -4,7 +4,7 @@
 
 > CouchDB is an open source NoSQL database that stores your data with JSON documents, which you can access via HTTP. It allows you to index, combine, and transform your documents with JavaScript.
 
-[Overview of CouchDB](http://couchdb.apache.org)
+[Overview of CouchDB](https://couchdb.apache.org)
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
 ## TL;DR
@@ -13,24 +13,35 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 docker run --name couchdb bitnami/couchdb:latest
 ```
 
-## Why use Bitnami Images?
+## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
 
-* Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
-* With Bitnami images the latest bug fixes and features are available as soon as possible.
-* Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [**minideb**](https://github.com/bitnami/minideb) -a minimalist Debian based container image that gives you a small base container image and the familiarity of a leading Linux distribution- or **scratch** -an explicitly empty image-.
-* All Bitnami images available in Docker Hub are signed with [Notation](https://notaryproject.dev/). [Check this post](https://blog.bitnami.com/2024/03/bitnami-packaged-containers-and-helm.html) to know how to verify the integrity of the images.
-* Bitnami container images are released on a regular basis with the latest distribution packages available.
+Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
 
-Looking to use CouchDB in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+- Granting community users access for the first time to security-optimized versions of popular container images.
+- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
+## Why use Bitnami Secure Images?
+
+- Bitnami Secure Images and Helm charts are built to make open source more secure and enterprise ready.
+- Triage security vulnerabilities faster, with transparency into CVE risks using industry standard Vulnerability Exploitability Exchange (VEX), KEV, and EPSS scores.
+- Our hardened images use a minimal OS (Photon Linux), which reduces the attack surface while maintaining extensibility through the use of an industry standard package format.
+- Stay more secure and compliant with continuously built images updated within hours of upstream patches.
+- Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
+- Hardened images come with attestation signatures (Notation), SBOMs, virus scan reports and other metadata produced in an SLSA-3 compliant software factory.
+
+Only a subset of BSI applications are available for free. Looking to access the entire catalog of applications as well as enterprise support? Try the [commercial edition of Bitnami Secure Images today](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/).
 
 ## Why use a non-root container?
 
-Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-work-with-non-root-containers-index.html).
+Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-work-with-non-root-containers-index.html).
 
 ## Supported tags and respective `Dockerfile` links
 
-Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html).
+Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html).
 
 You can see the equivalence between the different tags by taking a look at the `tags-info.yaml` file present in the branch folder, i.e `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`.
 
@@ -206,9 +217,9 @@ docker-compose restart couchdb
 
 In order to configure CouchDB as a cluster of nodes, please make sure you set proper values for the following environment variables:
 
-* `COUCHDB_NODENAME`. A server alias. It should be different on each container.
-* `COUCHDB_CLUSTER_PORT_NUMBER`: Port for cluster communication. Default: **9100**
-* `COUCHDB_CREATE_DATABASES`: Whether to create the system databases or not. You should only set it to yes in one of the nodes. Default: **yes**
+- `COUCHDB_NODENAME`. A server alias. It should be different on each container.
+- `COUCHDB_CLUSTER_PORT_NUMBER`: Port for cluster communication. Default: **9100**
+- `COUCHDB_CREATE_DATABASES`: Whether to create the system databases or not. You should only set it to yes in one of the nodes. Default: **yes**
 
 ## Logging
 
@@ -228,8 +239,8 @@ The Bitnami CouchDB Docker image is designed to be extended so it can be used as
 
 Before extending this image, please note there are certain configuration settings you can modify using the original image:
 
-* Settings that can be adapted using environment variables. For instance, you can change the port used by CouchDB by setting the environment variable `COUCHDB_PORT_NUMBER`.
-* [Replacing or adding your own configuration files](#mounting-your-own-configuration-files).
+- Settings that can be adapted using environment variables. For instance, you can change the port used by CouchDB by setting the environment variable `COUCHDB_PORT_NUMBER`.
+- [Replacing or adding your own configuration files](#mounting-your-own-configuration-files).
 
 If your desired customizations cannot be covered using the methods mentioned above, extend the image. To do so, create your own image using a Dockerfile with the format below:
 
@@ -241,9 +252,9 @@ FROM bitnami/couchdb
 
 Here is an example of extending the image with the following modifications:
 
-* Install the `vim` editor
-* Modify the port used by CouchDB
-* Change the user that runs the container
+- Install the `vim` editor
+- Modify the port used by CouchDB
+- Change the user that runs the container
 
 ```Dockerfile
 FROM bitnami/couchdb
@@ -265,7 +276,7 @@ USER 1002
 
 Based on the extended image, you can use a Docker Compose file like the one below to add other features:
 
-* Add a custom configuration file
+- Add a custom configuration file
 
 ```yaml
 version: '2'
@@ -275,8 +286,8 @@ services:
     environment:
       - COUCHDB_PASSWORD=couchdb
     ports:
-      - '1234:1234'
-      - '4369:4369'
+      - 1234:1234
+      - 4369:4369
     volumes:
       - couchdb_data:/bitnami/couchdb
       - /path/to/config/file/10-custom.ini:/opt/bitnami/couchdb/etc/local.d/10-custom.ini
@@ -323,7 +334,7 @@ docker run --name couchdb bitnami/couchdb:latest
 
 ### 3.0.0-0-debian-10-r0
 
-* The usage of 'ALLOW_ANONYMOUS_LOGIN' is now deprecated. Please, specify a password for the admin user (defaults to "admin") by setting the 'COUCHDB_PASSWORD' environment variable.
+- The usage of 'ALLOW_ANONYMOUS_LOGIN' is now deprecated. Please, specify a password for the admin user (defaults to "admin") by setting the 'COUCHDB_PASSWORD' environment variable.
 
 ## Using `docker-compose.yaml`
 
@@ -341,7 +352,7 @@ If you encountered a problem running this container, you can file an [issue](htt
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

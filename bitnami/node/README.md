@@ -4,7 +4,7 @@
 
 > Node.js is a runtime environment built on V8 JavaScript engine. Its event-driven, non-blocking I/O model enables the development of fast, scalable, and data-intensive server applications.
 
-[Overview of Node.js](http://nodejs.org/)
+[Overview of Node.js](https://nodejs.org/)
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
 ## TL;DR
@@ -13,20 +13,31 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 docker run -it --name node bitnami/node:latest
 ```
 
-## Why use Bitnami Images?
+## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
 
-* Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
-* With Bitnami images the latest bug fixes and features are available as soon as possible.
-* Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [**minideb**](https://github.com/bitnami/minideb) -a minimalist Debian based container image that gives you a small base container image and the familiarity of a leading Linux distribution- or **scratch** -an explicitly empty image-.
-* All Bitnami images available in Docker Hub are signed with [Notation](https://notaryproject.dev/). [Check this post](https://blog.bitnami.com/2024/03/bitnami-packaged-containers-and-helm.html) to know how to verify the integrity of the images.
-* Bitnami container images are released on a regular basis with the latest distribution packages available.
+Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
 
-Looking to use Node.js in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+- Granting community users access for the first time to security-optimized versions of popular container images.
+- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
+## Why use Bitnami Secure Images?
+
+- Bitnami Secure Images and Helm charts are built to make open source more secure and enterprise ready.
+- Triage security vulnerabilities faster, with transparency into CVE risks using industry standard Vulnerability Exploitability Exchange (VEX), KEV, and EPSS scores.
+- Our hardened images use a minimal OS (Photon Linux), which reduces the attack surface while maintaining extensibility through the use of an industry standard package format.
+- Stay more secure and compliant with continuously built images updated within hours of upstream patches.
+- Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
+- Hardened images come with attestation signatures (Notation), SBOMs, virus scan reports and other metadata produced in an SLSA-3 compliant software factory.
+
+Only a subset of BSI applications are available for free. Looking to access the entire catalog of applications as well as enterprise support? Try the [commercial edition of Bitnami Secure Images today](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/).
 
 ## Supported tags and respective `Dockerfile` links
 
-Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html).
+Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html).
 
 You can see the equivalence between the different tags by taking a look at the `tags-info.yaml` file present in the branch folder, i.e `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`.
 
@@ -64,7 +75,7 @@ docker run -it --name node bitnami/node
 
 **Further Reading:**
 
-* [nodejs.org/api/repl.html](https://nodejs.org/api/repl.html)
+- [nodejs.org/api/repl.html](https://nodejs.org/api/repl.html)
 
 ## Configuration
 
@@ -99,8 +110,8 @@ node:
 
 **Further Reading:**
 
-* [package.json documentation](https://docs.npmjs.com/files/package.json)
-* [npm start script](https://docs.npmjs.com/misc/scripts#default-values)
+- [package.json documentation](https://docs.npmjs.com/files/package.json)
+- [npm start script](https://docs.npmjs.com/misc/scripts#default-values)
 
 ## Working with private npm modules
 
@@ -108,13 +119,13 @@ To work with npm private modules, it is necessary to be logged into npm. npm CLI
 
 If you are working in a Docker environment, you can inject the token at build time in your Dockerfile by using the ARG parameter as follows:
 
-* Create a `npmrc` file within the project. It contains the instructions for the `npm` command to authenticate against npmjs.org registry. The `NPM_TOKEN` will be taken at build time. The file should look like this:
+- Create a `npmrc` file within the project. It contains the instructions for the `npm` command to authenticate against npmjs.org registry. The `NPM_TOKEN` will be taken at build time. The file should look like this:
 
 ```console
 //registry.npmjs.org/:_authToken=${NPM_TOKEN}
 ```
 
-* Add some new lines to the Dockerfile in order to copy the `npmrc` file, add the expected `NPM_TOKEN` by using the ARG parameter, and remove the `npmrc` file once the npm install is completed.
+- Add some new lines to the Dockerfile in order to copy the `npmrc` file, add the expected `NPM_TOKEN` by using the ARG parameter, and remove the `npmrc` file once the npm install is completed.
 
 You can find the Dockerfile below:
 
@@ -132,7 +143,7 @@ RUN npm install
 CMD node app.js
 ```
 
-* Now you can build the image using the above Dockerfile and the token. Run the `docker build` command as follows:
+- Now you can build the image using the above Dockerfile and the token. Run the `docker build` command as follows:
 
 ```console
 docker build --build-arg NPM_TOKEN=${NPM_TOKEN} .
@@ -144,7 +155,7 @@ Congratulations! You are now logged into the npm repo.
 
 ### Further reading
 
-* [npm official documentation](https://docs.npmjs.com/private-modules/docker-and-private-modules).
+- [npm official documentation](https://docs.npmjs.com/private-modules/docker-and-private-modules).
 
 ## Accessing a Node.js app running a web server
 
@@ -276,19 +287,19 @@ docker run --name node bitnami/node:latest
 
 ### Starting January 16, 2024
 
-* The `docker-compose.yaml` file has been removed, as it was solely intended for internal testing purposes.
+- The `docker-compose.yaml` file has been removed, as it was solely intended for internal testing purposes.
 
 ### 6.2.0-r0 (2016-05-11)
 
-* Commands are now executed as the `root` user. Use the `--user` argument to switch to another user or change to the required user using `sudo` to launch applications. Alternatively, as of Docker 1.10 User Namespaces are supported by the docker daemon. Refer to the [daemon user namespace options](https://docs.docker.com/engine/security/userns-remap/) for more details.
+- Commands are now executed as the `root` user. Use the `--user` argument to switch to another user or change to the required user using `sudo` to launch applications. Alternatively, as of Docker 1.10 User Namespaces are supported by the docker daemon. Refer to the [daemon user namespace options](https://docs.docker.com/engine/security/userns-remap/) for more details.
 
 ### 4.1.2-0 (2015-10-12)
 
-* Permissions fixed so `bitnami` user can install global npm modules without needing `sudo`.
+- Permissions fixed so `bitnami` user can install global npm modules without needing `sudo`.
 
 ### 4.1.1-0-r01 (2015-10-07)
 
-* `/app` directory is no longer exported as a volume. This caused problems when building on top of the image, since changes in the volume are not persisted between Dockerfile `RUN` instructions. To keep the previous behavior (so that you can mount the volume in another container), create the container with the `-v /app` option.
+- `/app` directory is no longer exported as a volume. This caused problems when building on top of the image, since changes in the volume are not persisted between Dockerfile `RUN` instructions. To keep the previous behavior (so that you can mount the volume in another container), create the container with the `-v /app` option.
 
 ## Contributing
 
@@ -300,7 +311,7 @@ If you encountered a problem running this container, you can file an [issue](htt
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

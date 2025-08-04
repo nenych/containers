@@ -13,30 +13,39 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 docker run -it --name etcd bitnami/etcd:latest
 ```
 
-## Why use Bitnami Images?
+## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
 
-* Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
-* With Bitnami images the latest bug fixes and features are available as soon as possible.
-* Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [**minideb**](https://github.com/bitnami/minideb) -a minimalist Debian based container image that gives you a small base container image and the familiarity of a leading Linux distribution- or **scratch** -an explicitly empty image-.
-* All Bitnami images available in Docker Hub are signed with [Notation](https://notaryproject.dev/). [Check this post](https://blog.bitnami.com/2024/03/bitnami-packaged-containers-and-helm.html) to know how to verify the integrity of the images.
-* Bitnami container images are released on a regular basis with the latest distribution packages available.
+Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
 
-Looking to use Etcd in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+- Granting community users access for the first time to security-optimized versions of popular container images.
+- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
+## Why use Bitnami Secure Images?
+
+- Bitnami Secure Images and Helm charts are built to make open source more secure and enterprise ready.
+- Triage security vulnerabilities faster, with transparency into CVE risks using industry standard Vulnerability Exploitability Exchange (VEX), KEV, and EPSS scores.
+- Our hardened images use a minimal OS (Photon Linux), which reduces the attack surface while maintaining extensibility through the use of an industry standard package format.
+- Stay more secure and compliant with continuously built images updated within hours of upstream patches.
+- Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
+- Hardened images come with attestation signatures (Notation), SBOMs, virus scan reports and other metadata produced in an SLSA-3 compliant software factory.
+
+Only a subset of BSI applications are available for free. Looking to access the entire catalog of applications as well as enterprise support? Try the [commercial edition of Bitnami Secure Images today](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/).
 
 ## How to deploy Etcd in Kubernetes?
 
 Deploying Bitnami applications as Helm Charts is the easiest way to get started with our applications on Kubernetes. Read more about the installation in the [Bitnami Etcd Chart GitHub repository](https://github.com/bitnami/charts/tree/master/bitnami/etcd).
 
-Bitnami containers can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Why use a non-root container?
 
-Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-work-with-non-root-containers-index.html).
+Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-work-with-non-root-containers-index.html).
 
 ## Supported tags and respective `Dockerfile` links
 
-Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html).
+Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html).
 
 You can see the equivalence between the different tags by taking a look at the `tags-info.yaml` file present in the branch folder, i.e `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`.
 
@@ -126,7 +135,7 @@ networks:
 
 services:
   Etcd:
-    image: 'bitnami/etcd:latest'
+    image: bitnami/etcd:latest
     environment:
       - ALLOW_NONE_AUTHENTICATION=yes
       - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
@@ -136,7 +145,7 @@ services:
     networks:
       - app-tier
   myapp:
-    image: 'YOUR_APPLICATION_IMAGE'
+    image: YOUR_APPLICATION_IMAGE
     networks:
       - app-tier
 ```
@@ -192,15 +201,12 @@ Apart from providing your custom configuration file, you can also modify the ser
 | `ETCD_DISASTER_RECOVERY`           | Whether etcd should try or not to recover from snapshots when the cluste disastrously fails. | `no`                    |
 | `ETCD_ON_K8S`                      | Whether etcd is running on a K8s environment or not.                                         | `no`                    |
 | `ETCD_INIT_SNAPSHOT_FILENAME`      | Existing snapshot filename to start the etcd cluster from.                                   | `nil`                   |
-| `ETCDCTL_API`                      | etcdctl API version.                                                                         | `3`                     |
-| `ETCD_DISABLE_STORE_MEMBER_ID`     | Disable writing the member id in a file.                                                     | `no`                    |
-| `ETCD_DISABLE_PRESTOP`             | Disable running the pre-stop hook.                                                           | `no`                    |
+| `ETCD_PREUPGRADE_START_DELAY`      | Optional delay before starting the pre-upgrade hook (in seconds).                            | `nil`                   |
 | `ETCD_NAME`                        | etcd member name.                                                                            | `nil`                   |
 | `ETCD_LOG_LEVEL`                   | etcd log level.                                                                              | `info`                  |
 | `ETCD_LISTEN_CLIENT_URLS`          | List of URLs to listen on for client traffic.                                                | `http://0.0.0.0:2379`   |
 | `ETCD_ADVERTISE_CLIENT_URLS`       | List of this member client URLs to advertise to the rest of the cluster.                     | `http://127.0.0.1:2379` |
 | `ETCD_INITIAL_CLUSTER`             | Initial list of members to bootstrap a cluster.                                              | `nil`                   |
-| `ETCD_INITIAL_CLUSTER_STATE`       | Initial cluster state. Allowed values: "new" or "existing".                                  | `nil`                   |
 | `ETCD_LISTEN_PEER_URLS`            | List of URLs to listen on for peers traffic.                                                 | `nil`                   |
 | `ETCD_INITIAL_ADVERTISE_PEER_URLS` | List of this member peer URLs to advertise to the rest of the cluster while bootstrapping.   | `nil`                   |
 | `ETCD_INITIAL_CLUSTER_TOKEN`       | Unique initial cluster token used for bootstrapping.                                         | `nil`                   |
@@ -210,6 +216,7 @@ Apart from providing your custom configuration file, you can also modify the ser
 | `ETCD_TRUSTED_CA_FILE`             | Path to the client server TLS trusted CA cert file.                                          | `nil`                   |
 | `ETCD_CLIENT_CERT_AUTH`            | Enable client cert authentication                                                            | `false`                 |
 | `ETCD_PEER_AUTO_TLS`               | Use generated certificates for TLS communications with peers.                                | `false`                 |
+| `ETCD_EXTRA_AUTH_FLAGS`            | Comma separated list of authentication flags to append to etcdctl                            | `nil`                   |
 
 #### Read-only environment variables
 
@@ -222,7 +229,7 @@ Apart from providing your custom configuration file, you can also modify the ser
 | `ETCD_CONF_DIR`             | etcd configuration directory.                                        | `${ETCD_BASE_DIR}/conf`            |
 | `ETCD_DEFAULT_CONF_DIR`     | etcd default configuration directory.                                | `${ETCD_BASE_DIR}/conf.default`    |
 | `ETCD_TMP_DIR`              | Directory where ETCD temporary files are stored.                     | `${ETCD_BASE_DIR}/tmp`             |
-| `ETCD_CONF_FILE`            | Airflow configuration file.                                          | `${ETCD_CONF_DIR}/etcd.yaml`       |
+| `ETCD_CONF_FILE`            | ETCD configuration file.                                             | `${ETCD_CONF_DIR}/etcd.yaml`       |
 | `ETCD_NEW_MEMBERS_ENV_FILE` | File containining the etcd environment to use after adding a member. | `${ETCD_DATA_DIR}/new_member_envs` |
 | `ETCD_DAEMON_USER`          | etcd system user name.                                               | `etcd`                             |
 | `ETCD_DAEMON_GROUP`         | etcd system user group.                                              | `etcd`                             |
@@ -231,17 +238,25 @@ Additionally, you can configure etcd using the upstream env variables [here](htt
 
 ## Notable Changes
 
+### 3.5.17-debian-12-r4
+
+- Drop support for non-Helm cluster deployment. Upgrading of any kind including increasing replica count must also be done with `helm upgrade` exclusively. CD automation tools that respect Helm hooks such as ArgoCD can also be used.
+- Remove `prestop.sh` script. Hence, container should no longer define lifecycle prestop hook.
+- Add `preupgrade.sh` script which should be run as a pre-upgrade Helm hook. This replaces the prestop hook as a more reliable mechanism to remove stale members when replica count is decreased.
+- Stop storing member ID in a local file which is unreliable. The container now check the member ID from the data dir instead.
+- Stop storing/checking for member removal from a local file. The container now check with other members in the cluster instead.
+
 ### 3.4.15-debian-10-r7
 
-* The container now contains the needed logic to deploy the Etcd container on Kubernetes using the [Bitnami Etcd Chart](https://github.com/bitnami/charts/tree/master/bitnami/etcd).
+- The container now contains the needed logic to deploy the Etcd container on Kubernetes using the [Bitnami Etcd Chart](https://github.com/bitnami/charts/tree/master/bitnami/etcd).
 
 ### 3.4.13-debian-10-r7
 
-* Arbitrary user ID(s) are supported again, see <https://github.com/etcd-io/etcd/issues/12158> for more information abut the changes in the upstream source code
+- Arbitrary user ID(s) are supported again, see <https://github.com/etcd-io/etcd/issues/12158> for more information abut the changes in the upstream source code
 
 ### 3.4.10-debian-10-r0
 
-* Arbitrary user ID(s) when running the container with a non-privileged user are not supported (only `1001` UID is allowed).
+- Arbitrary user ID(s) when running the container with a non-privileged user are not supported (only `1001` UID is allowed).
 
 ## Further documentation
 
@@ -263,7 +278,7 @@ If you encountered a problem running this container, you can file an [issue](htt
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

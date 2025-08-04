@@ -15,30 +15,39 @@ docker run --name opensearch bitnami/opensearch:latest
 
 You can find the available configuration options in the [Environment Variables](#environment-variables) section.
 
-## Why use Bitnami Images?
+## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
 
-* Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
-* With Bitnami images the latest bug fixes and features are available as soon as possible.
-* Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [**minideb**](https://github.com/bitnami/minideb) -a minimalist Debian based container image that gives you a small base container image and the familiarity of a leading Linux distribution- or **scratch** -an explicitly empty image-.
-* All Bitnami images available in Docker Hub are signed with [Notation](https://notaryproject.dev/). [Check this post](https://blog.bitnami.com/2024/03/bitnami-packaged-containers-and-helm.html) to know how to verify the integrity of the images.
-* Bitnami container images are released on a regular basis with the latest distribution packages available.
+Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
 
-Looking to use OpenSearch in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+- Granting community users access for the first time to security-optimized versions of popular container images.
+- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
+## Why use Bitnami Secure Images?
+
+- Bitnami Secure Images and Helm charts are built to make open source more secure and enterprise ready.
+- Triage security vulnerabilities faster, with transparency into CVE risks using industry standard Vulnerability Exploitability Exchange (VEX), KEV, and EPSS scores.
+- Our hardened images use a minimal OS (Photon Linux), which reduces the attack surface while maintaining extensibility through the use of an industry standard package format.
+- Stay more secure and compliant with continuously built images updated within hours of upstream patches.
+- Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
+- Hardened images come with attestation signatures (Notation), SBOMs, virus scan reports and other metadata produced in an SLSA-3 compliant software factory.
+
+Only a subset of BSI applications are available for free. Looking to access the entire catalog of applications as well as enterprise support? Try the [commercial edition of Bitnami Secure Images today](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/).
 
 ## How to deploy OpenSearch in Kubernetes?
 
 Deploying Bitnami applications as Helm Charts is the easiest way to get started with our applications on Kubernetes. Read more about the installation in the [Bitnami OpenSearch Chart GitHub repository](https://github.com/bitnami/charts/tree/master/bitnami/opensearch).
 
-Bitnami containers can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Why use a non-root container?
 
-Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-work-with-non-root-containers-index.html).
+Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-work-with-non-root-containers-index.html).
 
 ## Supported tags and respective `Dockerfile` links
 
-Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html).
+Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html).
 
 You can see the equivalence between the different tags by taking a look at the `tags-info.yaml` file present in the branch folder, i.e `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`.
 
@@ -153,11 +162,11 @@ networks:
 
 services:
   opensearch:
-    image: 'bitnami/opensearch:latest'
+    image: bitnami/opensearch:latest
     networks:
       - app-tier
   myapp:
-    image: 'YOUR_APPLICATION_IMAGE'
+    image: YOUR_APPLICATION_IMAGE
     networks:
       - app-tier
 ```
@@ -198,11 +207,12 @@ docker-compose up -d
 | `OPENSEARCH_IS_DEDICATED_NODE`                 | If false, Opensearch will be configured with all the roles, deploy as dedicated node using DB_NODE_ROLES.           | `no`                                        |
 | `OPENSEARCH_MINIMUM_MASTER_NODES`              | Minimum number of master nodes                                                                                      | `nil`                                       |
 | `OPENSEARCH_NODE_NAME`                         | Opensearch node name                                                                                                | `nil`                                       |
-| `OPENSEARCH_FS_SNAPSHOT_REPO_PATH`             | Opensearch node port number                                                                                         | `nil`                                       |
+| `OPENSEARCH_FS_SNAPSHOT_REPO_PATH`             | Opensearch repo path to restore snapshots from system repository                                                    | `nil`                                       |
 | `OPENSEARCH_NODE_ROLES`                        | Comma-separated list of Opensearch roles. If empty, will be deployed as a coordinating-only node.                   | `nil`                                       |
 | `OPENSEARCH_PLUGINS`                           | List of Opensearch plugins to activate                                                                              | `nil`                                       |
 | `OPENSEARCH_TRANSPORT_PORT_NUMBER`             | Opensearch node port number                                                                                         | `9300`                                      |
 | `OPENSEARCH_HTTP_PORT_NUMBER`                  | Opensearch port                                                                                                     | `9200`                                      |
+| `OPENSEARCH_ACTION_DESTRUCTIVE_REQUIRES_NAME`  | Enable action destructive requires name                                                                             | `nil`                                       |
 | `OPENSEARCH_ENABLE_SECURITY`                   | Enable Opensearch security settings.                                                                                | `false`                                     |
 | `OPENSEARCH_PASSWORD`                          | Password for "admin" user.                                                                                          | `bitnami`                                   |
 | `OPENSEARCH_TLS_VERIFICATION_MODE`             | Opensearch TLS verification mode in transport layer.                                                                | `full`                                      |
@@ -272,7 +282,7 @@ docker-compose up -d
 
 When you start the opensearch image, you can adjust the configuration of the instance by passing one or more environment variables either on the docker-compose file or on the `docker run` command line. If you want to add a new environment variable:
 
-* For Docker Compose, add the variable name and value under the application section:
+- For Docker Compose, add the variable name and value under the application section:
 
 ```yaml
 opensearch:
@@ -282,7 +292,7 @@ opensearch:
   ...
 ```
 
-* For manual execution add a `-e` option with each variable and value:
+- For manual execution add a `-e` option with each variable and value:
 
 ```console
  $ docker run -d --name opensearch \
@@ -296,17 +306,17 @@ opensearch:
 
 A cluster can easily be setup with the Bitnami OpenSearch Docker Image using the following environment variables:
 
-* `OPENSEARCH_CLUSTER_NAME`: The OpenSearch Cluster Name. Default: **opensearch-cluster**
-* `OPENSEARCH_CLUSTER_HOSTS`: List of opensearch hosts to set the cluster. Available separators are ' ', ',' and ';'. No defaults.
-* `OPENSEARCH_CLIENT_NODE`: OpenSearch node to behave as a 'smart router' for Kibana app. Default: **false**
-* `OPENSEARCH_NODE_NAME`: OpenSearch node name. No defaults.
-* `OPENSEARCH_MINIMUM_MASTER_NODES`: Minimum OpenSearch master nodes for a quorum. No defaults.
+- `OPENSEARCH_CLUSTER_NAME`: The OpenSearch Cluster Name. Default: **opensearch-cluster**
+- `OPENSEARCH_CLUSTER_HOSTS`: List of opensearch hosts to set the cluster. Available separators are ' ', ',' and ';'. No defaults.
+- `OPENSEARCH_CLIENT_NODE`: OpenSearch node to behave as a 'smart router' for Kibana app. Default: **false**
+- `OPENSEARCH_NODE_NAME`: OpenSearch node name. No defaults.
+- `OPENSEARCH_MINIMUM_MASTER_NODES`: Minimum OpenSearch master nodes for a quorum. No defaults.
 
 For larger cluster, you can setup 'dedicated nodes' using the following environment variables:
 
-* `OPENSEARCH_IS_DEDICATED_NODE`: OpenSearch node to behave as a 'dedicated node'. Default: **no**
-* `OPENSEARCH_NODE_TYPE`: OpenSearch node type when behaving as a 'dedicated node'. Valid values: *master*, *data*, *coordinating* or *ingest*.
-* `OPENSEARCH_CLUSTER_MASTER_HOSTS`: List of opensearch master-eligible hosts. Available separators are ' ', ',' and ';'. If no values are provided, it will have the same value as `OPENSEARCH_CLUSTER_HOSTS`.
+- `OPENSEARCH_IS_DEDICATED_NODE`: OpenSearch node to behave as a 'dedicated node'. Default: **no**
+- `OPENSEARCH_NODE_TYPE`: OpenSearch node type when behaving as a 'dedicated node'. Valid values: *master*, *data*, *coordinating* or *ingest*.
+- `OPENSEARCH_CLUSTER_MASTER_HOSTS`: List of opensearch master-eligible hosts. Available separators are ' ', ',' and ';'. If no values are provided, it will have the same value as `OPENSEARCH_CLUSTER_HOSTS`.
 
 Find more information about 'dedicated nodes' in the [official documentation](https://www.elastic.co/guide/en/opensearch/reference/current/modules-node.html).
 
@@ -394,8 +404,6 @@ Please, note that the whole configuration file will be replaced by the provided,
 If you would rather extend than replace the default configuration with your settings, mount your custom configuration file at `/opt/bitnami/opensearch/config/my_opensearch.yml`.
 
 ### Plugins
-
-The Bitnami OpenSearch Docker image comes with the [S3 Repository plugin](https://www.elastic.co/guide/en/opensearch/plugins/current/repository-s3.html) installed by default.
 
 You can add extra plugins by setting the `OPENSEARCH_PLUGINS` environment variable. To specify multiple plugins, separate them by spaces, commas or semicolons. When the container is initialized it will install all of the specified plugins before starting OpenSearch.
 
@@ -523,15 +531,15 @@ We'd love for you to contribute to this Docker image. You can request new featur
 
 If you encountered a problem running this container, you can file an [issue](https://github.com/bitnami/containers/issues/new/choose). For us to provide better support, be sure to include the following information in your issue:
 
-* Host OS and version
-* Docker version (`docker version`)
-* Output of `docker info`
-* Version of this container
-* The command you used to run the container, and any relevant output you saw (masking any sensitive information)
+- Host OS and version
+- Docker version (`docker version`)
+- Output of `docker info`
+- Version of this container
+- The command you used to run the container, and any relevant output you saw (masking any sensitive information)
 
 ## License
 
-Copyright &copy; 2024 Bitnami
+Copyright &copy; 2025 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

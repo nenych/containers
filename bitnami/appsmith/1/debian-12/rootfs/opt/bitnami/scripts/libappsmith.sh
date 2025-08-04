@@ -350,12 +350,13 @@ appsmith_initialize() {
                 local -r -a create_user_args=("-L" "http://localhost:${APPSMITH_API_PORT}/api/v1/users/super"
                     "-H" "Origin: http://localhost:${APPSMITH_API_PORT}"
                     "-H" "Content-Type: application/x-www-form-urlencoded"
+                    "-H" "X-Requested-By: Appsmith"
                     "--data-urlencode" "name=${APPSMITH_USERNAME}"
                     "--data-urlencode" "email=${APPSMITH_EMAIL}"
                     "--data-urlencode" "password=${APPSMITH_PASSWORD}"
                     "--data-urlencode" "allowCollectingAnnonymousData=false"
                     "--data-urlencode" "signupForNewsletter=false"
-                    "--data-urlencode" "proficiency=advanced"
+                    "--data-urlencode" "proficiency=Advanced"
                     "--data-urlencode" "useCase='personal project'")
                 if ! debug_execute "${create_user_cmd[@]}" "${create_user_args[@]}"; then
                     error "Installation failed. User ${APPSMITH_USERNAME} could not be created"
@@ -418,7 +419,12 @@ appsmith_backend_start_bg() {
 
     echo "$!" >"$APPSMITH_PID_FILE"
 
-    wait_for_log_entry "License verification completed with status: valid" "$log_file" 30 10
+    if ! retry_while "debug_execute curl --silent --fail http://localhost:${APPSMITH_API_PORT}/api/v1/health" "30" "10"; then
+        error "Timed out waiting for Appsmith healthcheck. Check logs for more information..."
+        cat "$log_file"
+        return 1
+    fi
+
     info "Appsmith started successfully"
 }
 

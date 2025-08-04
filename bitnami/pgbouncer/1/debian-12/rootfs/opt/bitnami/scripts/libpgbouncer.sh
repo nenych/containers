@@ -73,6 +73,9 @@ pgbouncer_validate() {
         elif [[ ! -f "$PGBOUNCER_AUTH_HBA_FILE" ]]; then
             print_validation_error "The hba file in the specified path ${PGBOUNCER_AUTH_HBA_FILE} does not exist"
         fi
+        if [[ ! -z "$PGBOUNCER_AUTH_IDENT_FILE" ]] && [[ ! -f "$PGBOUNCER_AUTH_IDENT_FILE" ]]; then
+            print_validation_error "The ident map file in the specified path ${PGBOUNCER_AUTH_IDENT_FILE} does not exist"
+        fi
     fi
 
     # TLS Checks (client)
@@ -269,6 +272,7 @@ pgbouncer_initialize() {
             "auth_file:${PGBOUNCER_AUTH_FILE}"
             "auth_type:${PGBOUNCER_AUTH_TYPE}"
             "auth_hba_file:${PGBOUNCER_AUTH_HBA_FILE}"
+            "auth_ident_file:${PGBOUNCER_AUTH_IDENT_FILE}"
             "auth_query:${PGBOUNCER_AUTH_QUERY}"
             "pidfile:${PGBOUNCER_PID_FILE}"
             "logfile:${PGBOUNCER_LOG_FILE}"
@@ -333,6 +337,12 @@ pgbouncer_initialize() {
 
     # Configuring permissions for tmp and logs folders
     am_i_root && configure_permissions_ownership "$PGBOUNCER_TMP_DIR $PGBOUNCER_LOG_DIR" -u "$PGBOUNCER_DAEMON_USER" -g "$PGBOUNCER_DAEMON_GROUP"
+
+    # Configure ownership and permissions for the socket directory if PGBOUNCER_SOCKET_DIR is set.
+    # This ensures the directory is usable by PGBOUNCER_DAEMON_USER, especially if it's a root-owned mount point.
+    if ! is_empty_value "$PGBOUNCER_SOCKET_DIR"; then
+        am_i_root && configure_permissions_ownership "$PGBOUNCER_SOCKET_DIR" -u "$PGBOUNCER_DAEMON_USER" -g "$PGBOUNCER_DAEMON_GROUP" --dir-mode "0755"
+    fi
 
     # Avoid exit code of previous commands to affect the result of this function
     true

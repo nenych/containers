@@ -15,30 +15,39 @@ docker run --name elasticsearch bitnami/elasticsearch:latest
 
 You can find the available configuration options in the [Environment Variables](#environment-variables) section.
 
-## Why use Bitnami Images?
+## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
 
-* Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
-* With Bitnami images the latest bug fixes and features are available as soon as possible.
-* Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [**minideb**](https://github.com/bitnami/minideb) -a minimalist Debian based container image that gives you a small base container image and the familiarity of a leading Linux distribution- or **scratch** -an explicitly empty image-.
-* All Bitnami images available in Docker Hub are signed with [Notation](https://notaryproject.dev/). [Check this post](https://blog.bitnami.com/2024/03/bitnami-packaged-containers-and-helm.html) to know how to verify the integrity of the images.
-* Bitnami container images are released on a regular basis with the latest distribution packages available.
+Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
 
-Looking to use Elasticsearch in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+- Granting community users access for the first time to security-optimized versions of popular container images.
+- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
+## Why use Bitnami Secure Images?
+
+- Bitnami Secure Images and Helm charts are built to make open source more secure and enterprise ready.
+- Triage security vulnerabilities faster, with transparency into CVE risks using industry standard Vulnerability Exploitability Exchange (VEX), KEV, and EPSS scores.
+- Our hardened images use a minimal OS (Photon Linux), which reduces the attack surface while maintaining extensibility through the use of an industry standard package format.
+- Stay more secure and compliant with continuously built images updated within hours of upstream patches.
+- Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
+- Hardened images come with attestation signatures (Notation), SBOMs, virus scan reports and other metadata produced in an SLSA-3 compliant software factory.
+
+Only a subset of BSI applications are available for free. Looking to access the entire catalog of applications as well as enterprise support? Try the [commercial edition of Bitnami Secure Images today](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/).
 
 ## How to deploy Elasticsearch in Kubernetes?
 
 Deploying Bitnami applications as Helm Charts is the easiest way to get started with our applications on Kubernetes. Read more about the installation in the [Bitnami Elasticsearch Chart GitHub repository](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch).
 
-Bitnami containers can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Why use a non-root container?
 
-Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-work-with-non-root-containers-index.html).
+Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-work-with-non-root-containers-index.html).
 
 ## Supported tags and respective `Dockerfile` links
 
-Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html).
+Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html).
 
 You can see the equivalence between the different tags by taking a look at the `tags-info.yaml` file present in the branch folder, i.e `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`.
 
@@ -153,11 +162,11 @@ networks:
 
 services:
   elasticsearch:
-    image: 'bitnami/elasticsearch:latest'
+    image: bitnami/elasticsearch:latest
     networks:
       - app-tier
   myapp:
-    image: 'YOUR_APPLICATION_IMAGE'
+    image: YOUR_APPLICATION_IMAGE
     networks:
       - app-tier
 ```
@@ -198,11 +207,12 @@ docker-compose up -d
 | `ELASTICSEARCH_IS_DEDICATED_NODE`                 | If false, Elasticsearch will be configured with all the roles, deploy as dedicated node using DB_NODE_ROLES.           | `no`                                           |
 | `ELASTICSEARCH_MINIMUM_MASTER_NODES`              | Minimum number of master nodes                                                                                         | `nil`                                          |
 | `ELASTICSEARCH_NODE_NAME`                         | Elasticsearch node name                                                                                                | `nil`                                          |
-| `ELASTICSEARCH_FS_SNAPSHOT_REPO_PATH`             | Elasticsearch node port number                                                                                         | `nil`                                          |
+| `ELASTICSEARCH_FS_SNAPSHOT_REPO_PATH`             | Elasticsearch repo path to restore snapshots from system repository                                                    | `nil`                                          |
 | `ELASTICSEARCH_NODE_ROLES`                        | Comma-separated list of Elasticsearch roles. If empty, will be deployed as a coordinating-only node.                   | `nil`                                          |
 | `ELASTICSEARCH_PLUGINS`                           | List of Elasticsearch plugins to activate                                                                              | `nil`                                          |
 | `ELASTICSEARCH_TRANSPORT_PORT_NUMBER`             | Elasticsearch node port number                                                                                         | `9300`                                         |
 | `ELASTICSEARCH_HTTP_PORT_NUMBER`                  | Elasticsearch port                                                                                                     | `9200`                                         |
+| `ELASTICSEARCH_ACTION_DESTRUCTIVE_REQUIRES_NAME`  | Enable action destructive requires name                                                                                | `nil`                                          |
 | `ELASTICSEARCH_ENABLE_SECURITY`                   | Enable Elasticsearch security settings.                                                                                | `false`                                        |
 | `ELASTICSEARCH_PASSWORD`                          | Password for "elastic" user.                                                                                           | `bitnami`                                      |
 | `ELASTICSEARCH_TLS_VERIFICATION_MODE`             | Elasticsearch TLS verification mode in transport layer.                                                                | `full`                                         |
@@ -237,7 +247,6 @@ docker-compose up -d
 | `ELASTICSEARCH_HTTP_TLS_CA_CERT_LOCATION`         | Path to CA certificate for HTTP TLS.                                                                                   | `$DB_CA_CERT_LOCATION`                         |
 | `ELASTICSEARCH_ENABLE_FIPS_MODE`                  | Enables FIPS mode of operation                                                                                         | `false`                                        |
 | `ELASTICSEARCH_KEYS`                              | Comma-separated list of key=value to be added to the Elasticsearch keystore                                            | `nil`                                          |
-| `ELASTICSEARCH_ACTION_DESTRUCTIVE_REQUIRES_NAME`  | Enable action destructive requires name                                                                                | `nil`                                          |
 
 #### Read-only environment variables
 
@@ -265,7 +274,7 @@ docker-compose up -d
 
 When you start the elasticsearch image, you can adjust the configuration of the instance by passing one or more environment variables either on the docker-compose file or on the `docker run` command line. If you want to add a new environment variable:
 
-* For Docker Compose, add the variable name and value under the application section:
+- For Docker Compose, add the variable name and value under the application section:
 
 ```yaml
 elasticsearch:
@@ -275,7 +284,7 @@ elasticsearch:
   ...
 ```
 
-* For manual execution add a `-e` option with each variable and value:
+- For manual execution add a `-e` option with each variable and value:
 
 ```console
  $ docker run -d --name elasticsearch \
@@ -488,29 +497,29 @@ docker-compose up elasticsearch
 
 ### 7.12.0-debian-10-r0
 
-* Elasticsearch 7.12.0 version or later are licensed under the Elastic License that is not currently accepted as an Open Source license by the Open Source Initiative (OSI).
-* Elasticsearch 7.12.0 version or later are including x-pack plugin installed by default. Follow the official documentation to use it.
+- Elasticsearch 7.12.0 version or later are licensed under the Elastic License that is not currently accepted as an Open Source license by the Open Source Initiative (OSI).
+- Elasticsearch 7.12.0 version or later are including x-pack plugin installed by default. Follow the official documentation to use it.
 
 ### 6.8.5-debian-9-r0, 6.8.5-ol-7-r1, 7.4.2-debian-9-r10, 7.4.2-ol-7-r27
 
-* Arbitrary user ID(s) when running the container with a non-privileged user is not supported (only `1001` UID is allowed).
-* This is temporary solution while Elasticsearch maintainers address an issue with ownership/permissions when installing plugins.
+- Arbitrary user ID(s) when running the container with a non-privileged user is not supported (only `1001` UID is allowed).
+- This is temporary solution while Elasticsearch maintainers address an issue with ownership/permissions when installing plugins.
 
 ### 6.8.2-debian-9-r36, 6.8.2-ol-7-r36, 7.3.1-debian-9-r8, 7.3.1-ol-7-r13
 
-* Updated OpenJDK to version 11
+- Updated OpenJDK to version 11
 
 ### 6.6.1-debian-9-r12, 6.6.1-ol-7-r13, 6.6.1-rhel-7-r13, 5.6.15-debian-9-r12 and 5.6.15-ol-7-r13
 
-* Deprecate the use of `elasticsearch_custom.yml` in favor of replacing the whole `elasticsearch.yml` file.
+- Deprecate the use of `elasticsearch_custom.yml` in favor of replacing the whole `elasticsearch.yml` file.
 
 ### 6.4.0-debian-9-r19, 6.4.0-ol-7-r18, 5.6.4-debian-9-r54, and 5.6.4-ol-7-r60
 
-* Decrease the size of the container. It is not necessary Node.js anymore. Elasticsearch configuration moved to bash scripts in the `rootfs/` folder.
-* The recommended mount point to persist data changes to `/bitnami/elasticsearch/data`.
-* The Elasticsearch configuration files are not persisted in a volume anymore. Now, they can be found at `/opt/bitnami/elasticsearch/config`.
-* Elasticsearch `plugins` and `modules` are not persisted anymore. It's necessary to indicate what plugins to install using the env. variable `ELASTICSEARCH_PLUGINS`
-* Backwards compatibility is not guaranteed when data is persisted using docker-compose. You can use the workaround below to overcome it:
+- Decrease the size of the container. It is not necessary Node.js anymore. Elasticsearch configuration moved to bash scripts in the `rootfs/` folder.
+- The recommended mount point to persist data changes to `/bitnami/elasticsearch/data`.
+- The Elasticsearch configuration files are not persisted in a volume anymore. Now, they can be found at `/opt/bitnami/elasticsearch/config`.
+- Elasticsearch `plugins` and `modules` are not persisted anymore. It's necessary to indicate what plugins to install using the env. variable `ELASTICSEARCH_PLUGINS`
+- Backwards compatibility is not guaranteed when data is persisted using docker-compose. You can use the workaround below to overcome it:
 
 ```console
 $ docker-compose down
@@ -523,11 +532,11 @@ $ docker-compose up -d
 
 ### 6.2.3-r7 & 5.6.4-r18
 
-* The Elasticsearch container has been migrated to a non-root user approach. Previously the container ran as the `root` user and the Elasticsearch daemon was started as the `elasticsearch` user. From now on, both the container and the Elasticsearch daemon run as user `1001`. As a consequence, the data directory must be writable by that user. You can revert this behavior by changing `USER 1001` to `USER root` in the Dockerfile.
+- The Elasticsearch container has been migrated to a non-root user approach. Previously the container ran as the `root` user and the Elasticsearch daemon was started as the `elasticsearch` user. From now on, both the container and the Elasticsearch daemon run as user `1001`. As a consequence, the data directory must be writable by that user. You can revert this behavior by changing `USER 1001` to `USER root` in the Dockerfile.
 
 ### 6.2.3-r2 & 5.6.4-r6
 
-* Elasticsearch container can be configured as a dedicated node with 4 different types: *master*, *data*, *coordinating* or *ingest*.
+- Elasticsearch container can be configured as a dedicated node with 4 different types: *master*, *data*, *coordinating* or *ingest*.
   Previously it was only achievable by using a custom `elasticsearch_custom.yml` file. From now on, you can use the environment variables `ELASTICSEARCH_IS_DEDICATED_NODE` & `ELASTICSEARCH_NODE_TYPE` to configure it.
 
 ## Using `docker-compose.yaml`
@@ -544,15 +553,15 @@ We'd love for you to contribute to this Docker image. You can request new featur
 
 If you encountered a problem running this container, you can file an [issue](https://github.com/bitnami/containers/issues/new/choose). For us to provide better support, be sure to include the following information in your issue:
 
-* Host OS and version
-* Docker version (`docker version`)
-* Output of `docker info`
-* Version of this container
-* The command you used to run the container, and any relevant output you saw (masking any sensitive information)
+- Host OS and version
+- Docker version (`docker version`)
+- Output of `docker info`
+- Version of this container
+- The command you used to run the container, and any relevant output you saw (masking any sensitive information)
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

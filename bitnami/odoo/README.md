@@ -16,27 +16,36 @@ docker run --name odoo bitnami/odoo:latest
 **Warning**: This quick setup is only intended for development environments. You are encouraged to change the insecure default credentials and check out the available configuration options in the [Environment Variables](#environment-variables) section for a more secure d
 eployment.
 
-## Why use Bitnami Images?
+## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
 
-* Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
-* With Bitnami images the latest bug fixes and features are available as soon as possible.
-* Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [**minideb**](https://github.com/bitnami/minideb) -a minimalist Debian based container image that gives you a small base container image and the familiarity of a leading Linux distribution- or **scratch** -an explicitly empty image-.
-* All Bitnami images available in Docker Hub are signed with [Notation](https://notaryproject.dev/). [Check this post](https://blog.bitnami.com/2024/03/bitnami-packaged-containers-and-helm.html) to know how to verify the integrity of the images.
-* Bitnami container images are released on a regular basis with the latest distribution packages available.
+Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
 
-Looking to use Odoo in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+- Granting community users access for the first time to security-optimized versions of popular container images.
+- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
+## Why use Bitnami Secure Images?
+
+- Bitnami Secure Images and Helm charts are built to make open source more secure and enterprise ready.
+- Triage security vulnerabilities faster, with transparency into CVE risks using industry standard Vulnerability Exploitability Exchange (VEX), KEV, and EPSS scores.
+- Our hardened images use a minimal OS (Photon Linux), which reduces the attack surface while maintaining extensibility through the use of an industry standard package format.
+- Stay more secure and compliant with continuously built images updated within hours of upstream patches.
+- Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
+- Hardened images come with attestation signatures (Notation), SBOMs, virus scan reports and other metadata produced in an SLSA-3 compliant software factory.
+
+Only a subset of BSI applications are available for free. Looking to access the entire catalog of applications as well as enterprise support? Try the [commercial edition of Bitnami Secure Images today](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/).
 
 ## How to deploy Odoo in Kubernetes?
 
 Deploying Bitnami applications as Helm Charts is the easiest way to get started with our applications on Kubernetes. Read more about the installation in the
 [Bitnami Odoo Chart GitHub repository](https://github.com/bitnami/charts/tree/master/bitnami/odoo).
 
-Bitnami containers can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Supported tags and respective `Dockerfile` links
 
-Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html).
+Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html).
 
 You can see the equivalence between the different tags by taking a look at the `tags-info.yaml` file present in the branch folder, i.e `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`.
 
@@ -132,13 +141,13 @@ This requires a minor change to the [`docker-compose.yml`](https://github.com/bi
    postgresql:
      ...
      volumes:
--      - 'postgresql_data:/bitnami/postgresql'
+-      - postgresql_data:/bitnami/postgresql
 +      - /path/to/postgresql-persistence:/bitnami/postgresql
    ...
    odoo:
      ...
      volumes:
--      - 'odoo_data:/bitnami/odoo'
+-      - odoo_data:/bitnami/odoo
 +      - /path/to/odoo-persistence:/bitnami/odoo
    ...
 -volumes:
@@ -219,7 +228,7 @@ docker run -d --name odoo \
 | `ODOO_CONF_DIR`              | Odoo directory for configuration files.         | `${ODOO_BASE_DIR}/conf`                       |
 | `ODOO_CONF_FILE`             | Configuration file for Odoo.                    | `${ODOO_CONF_DIR}/odoo.conf`                  |
 | `ODOO_DATA_DIR`              | Odoo directory for data files.                  | `${ODOO_BASE_DIR}/data`                       |
-| `ODOO_ADDONS_DIR`            | Odoo directory for addons.                      | `${ODOO_ADDONS_DIR:-${ODOO_BASE_DIR}/addons}` |
+| `ODOO_ADDONS_DIR`            | Odoo directory for extra addons.                | `${ODOO_ADDONS_DIR:-${ODOO_BASE_DIR}/addons}` |
 | `ODOO_TMP_DIR`               | Odoo directory for temporary files.             | `${ODOO_BASE_DIR}/tmp`                        |
 | `ODOO_PID_FILE`              | PID file for Odoo.                              | `${ODOO_TMP_DIR}/odoo.pid`                    |
 | `ODOO_LOGS_DIR`              | Odoo directory for log files.                   | `${ODOO_BASE_DIR}/log`                        |
@@ -231,7 +240,7 @@ docker run -d --name odoo \
 
 When you start the Odoo image, you can adjust the configuration of the instance by passing one or more environment variables either on the docker-compose file or on the `docker run` command line. If you want to add a new environment variable:
 
-* For docker-compose add the variable name and value under the application section in the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/odoo/docker-compose.yml) file present in this repository:
+- For docker-compose add the variable name and value under the application section in the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/odoo/docker-compose.yml) file present in this repository:
 
     ```yaml
     odoo:
@@ -241,7 +250,7 @@ When you start the Odoo image, you can adjust the configuration of the instance 
       ...
     ```
 
-* For manual execution add a `--env` option with each variable and value:
+- For manual execution add a `--env` option with each variable and value:
 
     ```console
     $ docker run -d --name odoo -p 80:8069 \
@@ -257,7 +266,7 @@ When you start the Odoo image, you can adjust the configuration of the instance 
 
 This would be an example of SMTP configuration using a Gmail account:
 
-* Modify the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/odoo/docker-compose.yml) file present in this repository:
+- Modify the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/odoo/docker-compose.yml) file present in this repository:
 
     ```yaml
       odoo:
@@ -271,7 +280,7 @@ This would be an example of SMTP configuration using a Gmail account:
       ...
     ```
 
-* For manual execution:
+- For manual execution:
 
     ```console
     $ docker run -d --name odoo -p 80:8069 \
@@ -288,7 +297,7 @@ This would be an example of SMTP configuration using a Gmail account:
 
 The Bitnami Odoo container supports connecting the Odoo application to an external database. This would be an example of using an external database for Odoo.
 
-* Modify the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/odoo/docker-compose.yml) file present in this repository:
+- Modify the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/odoo/docker-compose.yml) file present in this repository:
 
     ```diff
        odoo:
@@ -302,7 +311,7 @@ The Bitnami Odoo container supports connecting the Odoo application to an extern
          ...
     ```
 
-* For manual execution:
+- For manual execution:
 
     ```console
     $ docker run -d --name odoo\
@@ -428,12 +437,12 @@ docker-compose up -d
 
 ### 12.0.20210615-debian-10-r20, 13.0.20210610-debian-10-r24 and 14.0.20210610-debian-10-r22
 
-* The size of the container image has been decreased.
-* The configuration logic is now based on Bash scripts in the *rootfs/* folder.
-* It is now possible to use an already populated Odoo database from another installation. In order to do this, use the environment variable `ODOO_SKIP_BOOTSTRAP`, which forces the container not to run the initial Odoo setup wizard.
-* Removed port 8071 from list of exposed ports. This port was used by the Odoo XMLRPCS service, but was removed in Odoo 10.
-* Added port 8072 to the list of exposed ports. This port is used by the [Odoo Longpolling service](https://www.odoo.com/documentation/14.0/administration/deployment/deploy.html#livechat).
-* The `WITHOUT_DEMO` environment variable was deprecated in favor of the boolean `ODOO_LOAD_DEMO_DATA` environment variable.
+- The size of the container image has been decreased.
+- The configuration logic is now based on Bash scripts in the *rootfs/* folder.
+- It is now possible to use an already populated Odoo database from another installation. In order to do this, use the environment variable `ODOO_SKIP_BOOTSTRAP`, which forces the container not to run the initial Odoo setup wizard.
+- Removed port 8071 from list of exposed ports. This port was used by the Odoo XMLRPCS service, but was removed in Odoo 10.
+- Added port 8072 to the list of exposed ports. This port is used by the [Odoo Longpolling service](https://www.odoo.com/documentation/14.0/administration/deployment/deploy.html#livechat).
+- The `WITHOUT_DEMO` environment variable was deprecated in favor of the boolean `ODOO_LOAD_DEMO_DATA` environment variable.
 
 ## Contributing
 
@@ -445,7 +454,7 @@ If you encountered a problem running this container, you can file an [issue](htt
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

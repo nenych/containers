@@ -13,30 +13,39 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 docker run --name zookeeper bitnami/zookeeper:latest
 ```
 
-## Why use Bitnami Images?
+## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
 
-* Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
-* With Bitnami images the latest bug fixes and features are available as soon as possible.
-* Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [**minideb**](https://github.com/bitnami/minideb) -a minimalist Debian based container image that gives you a small base container image and the familiarity of a leading Linux distribution- or **scratch** -an explicitly empty image-.
-* All Bitnami images available in Docker Hub are signed with [Notation](https://notaryproject.dev/). [Check this post](https://blog.bitnami.com/2024/03/bitnami-packaged-containers-and-helm.html) to know how to verify the integrity of the images.
-* Bitnami container images are released on a regular basis with the latest distribution packages available.
+Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
 
-Looking to use Apache ZooKeeper in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+- Granting community users access for the first time to security-optimized versions of popular container images.
+- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
+## Why use Bitnami Secure Images?
+
+- Bitnami Secure Images and Helm charts are built to make open source more secure and enterprise ready.
+- Triage security vulnerabilities faster, with transparency into CVE risks using industry standard Vulnerability Exploitability Exchange (VEX), KEV, and EPSS scores.
+- Our hardened images use a minimal OS (Photon Linux), which reduces the attack surface while maintaining extensibility through the use of an industry standard package format.
+- Stay more secure and compliant with continuously built images updated within hours of upstream patches.
+- Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
+- Hardened images come with attestation signatures (Notation), SBOMs, virus scan reports and other metadata produced in an SLSA-3 compliant software factory.
+
+Only a subset of BSI applications are available for free. Looking to access the entire catalog of applications as well as enterprise support? Try the [commercial edition of Bitnami Secure Images today](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/).
 
 ## How to deploy Apache ZooKeeper in Kubernetes?
 
 Deploying Bitnami applications as Helm Charts is the easiest way to get started with our applications on Kubernetes. Read more about the installation in the [Bitnami Apache ZooKeeper Chart GitHub repository](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper).
 
-Bitnami containers can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Why use a non-root container?
 
-Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-work-with-non-root-containers-index.html).
+Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-work-with-non-root-containers-index.html).
 
 ## Supported tags and respective `Dockerfile` links
 
-Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html).
+Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html).
 
 You can see the equivalence between the different tags by taking a look at the `tags-info.yaml` file present in the branch folder, i.e `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`.
 
@@ -140,11 +149,11 @@ networks:
 
 services:
   zookeeper:
-    image: 'bitnami/zookeeper:latest'
+    image: bitnami/zookeeper:latest
     networks:
       - app-tier
   myapp:
-    image: 'YOUR_APPLICATION_IMAGE'
+    image: YOUR_APPLICATION_IMAGE
     networks:
       - app-tier
 ```
@@ -237,13 +246,13 @@ docker-compose up -d
 
 When you start the Apache ZooKeeper image, you can adjust the configuration of the instance by passing one or more environment variables either on the docker-compose file or on the `docker run` command line. If you want to add a new environment variable:
 
-* For manual execution add a -e option with each variable and value:
+- For manual execution add a -e option with each variable and value:
 
 ```console
 docker run --name zookeeper -e ZOO_SERVER_ID=1 bitnami/zookeeper:latest
 ```
 
-* For docker-compose add the variable name and value under the application section in the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/zookeeper/docker-compose.yml) file present in this repository:
+- For docker-compose add the variable name and value under the application section in the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/zookeeper/docker-compose.yml) file present in this repository:
 
 ```yaml
 services:
@@ -279,9 +288,9 @@ version: '2'
 
 services:
   zookeeper:
-    image: 'bitnami/zookeeper:latest'
+    image: bitnami/zookeeper:latest
     ports:
-      - '2181:2181'
+      - 2181:2181
     volumes:
       - /path/to/zoo.cfg:/opt/bitnami/zookeeper/conf/zoo.cfg
 ```
@@ -345,11 +354,11 @@ services:
 
 An Apache ZooKeeper (<https://zookeeper.apache.org/doc/r3.1.2/zookeeperAdmin.html>) cluster can easily be setup with the Bitnami Apache ZooKeeper Docker image using the following environment variables:
 
-* `ZOO_SERVERS`: Comma, space or semi-colon separated list of servers. This can be done with or without specifying the ID of the server in the ensemble. No defaults. Examples:
-* without Server ID - zoo1:2888:3888,zoo2:2888:3888
-* with Server ID - zoo1:2888:3888::1,zoo2:2888:3888::2
-* without Server ID and Observers - zoo1:2888:3888,zoo2:2888:3888:observer
-* with Server ID and Observers - zoo1:2888:3888::1,zoo2:2888:3888:observer::2
+- `ZOO_SERVERS`: Comma, space or semi-colon separated list of servers. This can be done with or without specifying the ID of the server in the ensemble. No defaults. Examples:
+- without Server ID - zoo1:2888:3888,zoo2:2888:3888
+- with Server ID - zoo1:2888:3888::1,zoo2:2888:3888::2
+- without Server ID and Observers - zoo1:2888:3888,zoo2:2888:3888:observer
+- with Server ID and Observers - zoo1:2888:3888::1,zoo2:2888:3888:observer::2
 
 For reliable Apache ZooKeeper service, you should deploy Apache ZooKeeper in a cluster known as an ensemble. As long as a majority of the ensemble are up, the service will be available. Because Apache ZooKeeper requires a majority, it is best to use an odd number of machines. For example, with four machines Apache ZooKeeper can only handle the failure of a single machine; if two machines fail, the remaining two machines do not constitute a majority. However, with five machines Apache ZooKeeper can handle the failure of two machines.
 
@@ -417,33 +426,33 @@ version: '2'
 
 services:
   zookeeper1:
-    image: 'bitnami/zookeeper:latest'
+    image: bitnami/zookeeper:latest
     ports:
-      - '2181'
-      - '2888'
-      - '3888'
+      - 2181
+      - 2888
+      - 3888
     volumes:
       - /path/to/zookeeper-persistence:/bitnami/zookeeper
     environment:
       - ZOO_SERVER_ID=1
       - ZOO_SERVERS=0.0.0.0:2888:3888,zookeeper2:2888:3888,zookeeper3:2888:3888
   zookeeper2:
-    image: 'bitnami/zookeeper:latest'
+    image: bitnami/zookeeper:latest
     ports:
-      - '2181'
-      - '2888'
-      - '3888'
+      - 2181
+      - 2888
+      - 3888
     volumes:
       - /path/to/zookeeper-persistence:/bitnami/zookeeper
     environment:
       - ZOO_SERVER_ID=2
       - ZOO_SERVERS=zookeeper1:2888:3888,0.0.0.0:2888:3888,zookeeper3:2888:3888
   zookeeper3:
-    image: 'bitnami/zookeeper:latest'
+    image: bitnami/zookeeper:latest
     ports:
-      - '2181'
-      - '2888'
-      - '3888'
+      - 2181
+      - 2888
+      - 3888
     volumes:
       - /path/to/zookeeper-persistence:/bitnami/zookeeper
     environment:
@@ -529,9 +538,9 @@ version: '2'
 
 services:
   zookeeper:
-    image: 'bitnami/zookeeper:latest'
+    image: bitnami/zookeeper:latest
     ports:
-      - '2181:2181'
+      - 2181:2181
     volumes:
       - /path/to/zookeeper-backups/latest:/bitnami/zookeeper
 ```
@@ -585,20 +594,20 @@ docker-compose up zookeeper
 
 ### 3.5.5-r95
 
-* Apache ZooKeeper configuration moved to bash scripts in the rootfs/ folder.
+- Apache ZooKeeper configuration moved to bash scripts in the rootfs/ folder.
 
 ### 3.4.12-r25
 
-* Configuration is not persisted, it is regenerated each time the container is created or it is used as volume.
+- Configuration is not persisted, it is regenerated each time the container is created or it is used as volume.
 
 ### 3.4.10-r4
 
-* The zookeeper container has been migrated to a non-root container approach. Previously the container run as `root` user and the zookeeper daemon was started as `zookeeper` user. From now own, both the container and the zookeeper daemon run as user `1001`.
+- The zookeeper container has been migrated to a non-root container approach. Previously the container run as `root` user and the zookeeper daemon was started as `zookeeper` user. From now own, both the container and the zookeeper daemon run as user `1001`.
   As a consequence, the configuration files are writable by the user running the zookeeper process.
 
 ### 3.4.10-r0
 
-* New release
+- New release
 
 ## Using `docker-compose.yaml`
 
@@ -616,7 +625,7 @@ If you encountered a problem running this container, you can file an [issue](htt
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

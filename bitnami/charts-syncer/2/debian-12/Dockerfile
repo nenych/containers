@@ -1,8 +1,9 @@
 # Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
-FROM docker.io/bitnami/minideb:bookworm as builder
+FROM docker.io/bitnami/minideb:bookworm AS builder
 
+ARG DOWNLOADS_URL="downloads.bitnami.com/files/stacksmith"
 ARG TARGETARCH
 
 ENV OS_ARCH="${TARGETARCH:-amd64}"
@@ -12,47 +13,51 @@ SHELL ["/bin/bash", "-o", "errexit", "-o", "nounset", "-o", "pipefail", "-c"]
 
 # Install required system packages and dependencies
 RUN install_packages ca-certificates curl
-RUN mkdir -p /tmp/bitnami/pkg/cache/ ; cd /tmp/bitnami/pkg/cache/ ; \
+RUN --mount=type=secret,id=downloads_url,env=SECRET_DOWNLOADS_URL \
+    DOWNLOADS_URL=${SECRET_DOWNLOADS_URL:-${DOWNLOADS_URL}} ; \
+    mkdir -p /tmp/bitnami/pkg/cache/ ; cd /tmp/bitnami/pkg/cache/ || exit 1 ; \
     COMPONENTS=( \
-      "charts-syncer-2.0.1-1-linux-${OS_ARCH}-debian-12" \
+      "charts-syncer-2.1.2-3-linux-${OS_ARCH}-debian-12" \
     ) ; \
     for COMPONENT in "${COMPONENTS[@]}"; do \
       if [ ! -f "${COMPONENT}.tar.gz" ]; then \
-        curl -SsLf "https://downloads.bitnami.com/files/stacksmith/${COMPONENT}.tar.gz" -O ; \
-        curl -SsLf "https://downloads.bitnami.com/files/stacksmith/${COMPONENT}.tar.gz.sha256" -O ; \
+        curl -SsLf "https://${DOWNLOADS_URL}/${COMPONENT}.tar.gz" -O ; \
+        curl -SsLf "https://${DOWNLOADS_URL}/${COMPONENT}.tar.gz.sha256" -O ; \
       fi ; \
       sha256sum -c "${COMPONENT}.tar.gz.sha256" ; \
-      tar -zxf "${COMPONENT}.tar.gz" -C /opt/bitnami --strip-components=2 --no-same-owner --wildcards '*/files' ; \
+      tar -zxf "${COMPONENT}.tar.gz" -C /opt/bitnami --strip-components=2 --no-same-owner ; \
       rm -rf "${COMPONENT}".tar.gz{,.sha256} ; \
     done
+RUN mkdir -p /rootfs/tmp && mkdir /rootfs/.charts-syncer && chmod g+rwX /rootfs/tmp /rootfs/.charts-syncer
+RUN uninstall_packages curl
 
 ######
 
 FROM scratch
 
+ARG DOWNLOADS_URL="downloads.bitnami.com/files/stacksmith"
 ARG TARGETARCH
 
 ENV OS_ARCH="${TARGETARCH:-amd64}"
 
 LABEL com.vmware.cp.artifact.flavor="sha256:c50c90cfd9d12b445b011e6ad529f1ad3daea45c26d20b00732fae3cd71f6a83" \
       org.opencontainers.image.base.name="scratch" \
-      org.opencontainers.image.created="2024-08-06T23:12:34Z" \
+      org.opencontainers.image.created="2025-07-08T20:08:21Z" \
       org.opencontainers.image.description="Application packaged by Broadcom, Inc." \
-      org.opencontainers.image.licenses="Apache-2.0" \
-      org.opencontainers.image.ref.name="2.0.1-debian-12-r1" \
       org.opencontainers.image.title="charts-syncer" \
       org.opencontainers.image.vendor="Broadcom, Inc." \
-      org.opencontainers.image.version="2.0.1"
+      org.opencontainers.image.version="2.1.2"
 
-COPY prebuildfs /
 COPY rootfs /
-COPY --from=builder /opt/bitnami/charts-syncer/bin/charts-syncer /charts-syncer
 COPY --from=builder /opt/bitnami/charts-syncer/.spdx-charts-syncer.spdx /opt/bitnami/charts-syncer/.spdx-charts-syncer.spdx
+COPY --from=builder /opt/bitnami/charts-syncer/bin/charts-syncer /opt/bitnami/charts-syncer/bin/charts-syncer
 COPY --from=builder /opt/bitnami/charts-syncer/licenses /opt/bitnami/charts-syncer/licenses
+COPY --from=builder /rootfs /
 
-ENV APP_VERSION="2.0.1" \
-    BITNAMI_APP_NAME="charts-syncer"
+ENV APP_VERSION="2.1.2" \
+    BITNAMI_APP_NAME="charts-syncer" \
+    PATH="/opt/bitnami/charts-syncer/bin:$PATH"
 
 USER 1001
 
-CMD [ "/charts-syncer" ]
+ENTRYPOINT [ "charts-syncer" ]

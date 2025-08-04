@@ -15,16 +15,27 @@ docker run --name scylladb bitnami/scylladb:latest
 
 You can find the default credentials and available configuration options in the [Environment Variables](#environment-variables) section.
 
-## Why use Bitnami Images?
+## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
 
-* Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
-* With Bitnami images the latest bug fixes and features are available as soon as possible.
-* Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [**minideb**](https://github.com/bitnami/minideb) -a minimalist Debian based container image that gives you a small base container image and the familiarity of a leading Linux distribution- or **scratch** -an explicitly empty image-.
-* All Bitnami images available in Docker Hub are signed with [Notation](https://notaryproject.dev/). [Check this post](https://blog.bitnami.com/2024/03/bitnami-packaged-containers-and-helm.html) to know how to verify the integrity of the images.
-* Bitnami container images are released on a regular basis with the latest distribution packages available.
+Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
 
-Looking to use ScyllaDB in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+- Granting community users access for the first time to security-optimized versions of popular container images.
+- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
+## Why use Bitnami Secure Images?
+
+- Bitnami Secure Images and Helm charts are built to make open source more secure and enterprise ready.
+- Triage security vulnerabilities faster, with transparency into CVE risks using industry standard Vulnerability Exploitability Exchange (VEX), KEV, and EPSS scores.
+- Our hardened images use a minimal OS (Photon Linux), which reduces the attack surface while maintaining extensibility through the use of an industry standard package format.
+- Stay more secure and compliant with continuously built images updated within hours of upstream patches.
+- Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
+- Hardened images come with attestation signatures (Notation), SBOMs, virus scan reports and other metadata produced in an SLSA-3 compliant software factory.
+
+Only a subset of BSI applications are available for free. Looking to access the entire catalog of applications as well as enterprise support? Try the [commercial edition of Bitnami Secure Images today](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/).
 
 ## Why use a non-root container?
 
@@ -33,8 +44,6 @@ Non-root container images add an extra layer of security and are generally recom
 ## How to deploy ScyllaDB in Kubernetes?
 
 Deploying Bitnami applications as Helm Charts is the easiest way to get started with our applications on Kubernetes. Read more about the installation in the [Bitnami ScyllaDB Chart GitHub repository](https://github.com/bitnami/charts/tree/master/bitnami/scylladb).
-
-Bitnami containers can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Supported tags and respective `Dockerfile` links
 
@@ -138,11 +147,11 @@ networks:
 
 services:
   scylladb:
-    image: 'bitnami/scylladb:latest'
+    image: bitnami/scylladb:latest
     networks:
       - app-tier
   myapp:
-    image: 'YOUR_APPLICATION_IMAGE'
+    image: YOUR_APPLICATION_IMAGE
     networks:
       - app-tier
 ```
@@ -166,7 +175,6 @@ docker-compose up -d
 
 | Name                                              | Description                                                                             | Default Value                         |
 |---------------------------------------------------|-----------------------------------------------------------------------------------------|---------------------------------------|
-| `SCYLLADB_MOUNTED_CONF_DIR`                       | ScyllaDB directory for mounted configuration files                                      | `${DB_VOLUME_DIR}/conf`               |
 | `SCYLLADB_CLIENT_ENCRYPTION`                      | Enable client encryption                                                                | `false`                               |
 | `SCYLLADB_CLUSTER_NAME`                           | ScyllaDB cluster name                                                                   | `My Cluster`                          |
 | `SCYLLADB_DATACENTER`                             | ScyllaDB datacenter name                                                                | `dc1`                                 |
@@ -213,6 +221,7 @@ docker-compose up -d
 | `SCYLLADB_SSL_CA_FILE`                            | ScyllaDB SSL CA location                                                                | `nil`                                 |
 | `SCYLLADB_SSL_VALIDATE`                           | Perform SSL validation on the certificates                                              | `false`                               |
 | `SSL_VERSION`                                     | TLS version to use when connecting.                                                     | `TLSv1_2`                             |
+| `SCYLLADB_MOUNTED_CONF_DIR`                       | ScyllaDB directory for mounted configuration files                                      | `${DB_VOLUME_DIR}/etc`                |
 | `SCYLLADB_CQL_SHARD_PORT_NUMBER`                  | CQL (shard aware) port                                                                  | `19042`                               |
 | `SCYLLADB_API_PORT_NUMBER`                        | REST API port                                                                           | `10000`                               |
 | `SCYLLADB_PROMETHEUS_PORT_NUMBER`                 | Prometheus metrics port                                                                 | `9180`                                |
@@ -253,13 +262,14 @@ docker-compose up -d
 | `SCYLLADB_MOUNTED_RACKDC_PATH`       | Relative path (in mounted volume) to ScyllaDB cassandra-rackdc-properties file | `scylla/cassandra-rackdc.properties`                             |
 | `SCYLLADB_MOUNTED_ENV_PATH`          | Relative path (in mounted volume) to ScyllaDB cassandra-env.sh file            | `scylla/cassandra/cassandra-env.sh`                              |
 | `SCYLLADB_MOUNTED_LOGBACK_PATH`      | Path to ScyllaDB logback.xml file                                              | `scylla/cassandra/logback.xml`                                   |
+| `SCYLLADB_CONF`                      | ScyllaDB configuration directory                                               | `$SCYLLADB_CONF_DIR`                                             |
 
 Additionally, any environment variable beginning with the following prefix will be mapped to its corresponding ScyllaDB key in the proper file:
 
-* `SCYLLADB_CFG_ENV_`: Will add the corresponding key and the provided value to `scylladb-env.sh`.
-* `SCYLLADB_CFG_RACKDC_`: Will add the corresponding key and the provided value to `scylladb-rackdc.properties`.
-* `SCYLLADB_CFG_COMMITLOG_`: Will add the corresponding key and the provided value to `commitlog_archiving.properties`.
-* `SCYLLADB_CFG_YAML_`: Will add the corresponding key and the provided value to `scylladb.yaml`.
+- `SCYLLADB_CFG_ENV_`: Will add the corresponding key and the provided value to `scylladb-env.sh`.
+- `SCYLLADB_CFG_RACKDC_`: Will add the corresponding key and the provided value to `scylladb-rackdc.properties`.
+- `SCYLLADB_CFG_COMMITLOG_`: Will add the corresponding key and the provided value to `commitlog_archiving.properties`.
+- `SCYLLADB_CFG_YAML_`: Will add the corresponding key and the provided value to `scylladb.yaml`.
 
 For example, use `SCYLLADB_CFG_RACKDC_PREFER_LOCAL=true` in order to configure `prefer_local` in `scylladb-rackdc.properties`. Or, use `SCYLLADB_CFG_YAML_INTERNODE_COMPRESSION=all` in order to set `internode_compression` to `all` in `scylladb.yaml`.
 
@@ -267,7 +277,7 @@ For example, use `SCYLLADB_CFG_RACKDC_PREFER_LOCAL=true` in order to configure `
 
 When you start the scylladb image, you can adjust the configuration of the instance by passing one or more environment variables either on the docker-compose file or on the `docker run` command line. If you want to add a new environment variable:
 
-* For docker-compose add the variable name and value under the application section:
+- For docker-compose add the variable name and value under the application section:
 
 ```yaml
 scylladb:
@@ -276,7 +286,7 @@ scylladb:
     - SCYLLADB_TRANSPORT_PORT_NUMBER=7000
 ```
 
-* For manual execution add a `-e` option with each variable and value:
+- For manual execution add a `-e` option with each variable and value:
 
 ```console
  $ docker run --name scylladb -d -p 7000:7000 --network=scylladb_network \
@@ -437,15 +447,15 @@ Refer to the [configuration](http://docs.datastax.com/en/scylladb/3.x/scylladb/c
 
 The Bitnami ScyllaDB Docker image allows configuring TLS encryption between nodes and between server-client. This is done by mounting in `/bitnami/scylladb/secrets` two files:
 
-* `keystore`: File with the server keystore
-* `truststore`: File with the server truststore
+- `keystore`: File with the server keystore
+- `truststore`: File with the server truststore
 
 Apart from that, the following environment variables must be set:
 
-* `SCYLLADB_KEYSTORE_PASSWORD`: Password for accessing the keystore.
-* `SCYLLADB_TRUSTSTORE_PASSWORD`: Password for accessing the truststore.
-* `SCYLLADB_INTERNODE_ENCRYPTION`: Sets the type of encryption between nodes. The default value is `none`. Can be set to `all`, `none`, `dc` or `rack`.
-* `SCYLLADB_CLIENT_ENCRYPTION`: Enables client-server encryption. The default value is `false`.
+- `SCYLLADB_KEYSTORE_PASSWORD`: Password for accessing the keystore.
+- `SCYLLADB_TRUSTSTORE_PASSWORD`: Password for accessing the truststore.
+- `SCYLLADB_INTERNODE_ENCRYPTION`: Sets the type of encryption between nodes. The default value is `none`. Can be set to `all`, `none`, `dc` or `rack`.
+- `SCYLLADB_CLIENT_ENCRYPTION`: Enables client-server encryption. The default value is `false`.
 
 ## Logging
 
@@ -540,7 +550,7 @@ If you encountered a problem running this container, you can file an [issue](htt
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

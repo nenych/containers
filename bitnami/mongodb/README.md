@@ -4,7 +4,7 @@
 
 > MongoDB&reg; is a relational open source NoSQL database. Easy to use, it stores data in JSON-like documents. Automated scalability and high-performance. Ideal for developing cloud native applications.
 
-[Overview of MongoDB&reg;](http://www.mongodb.org)
+[Overview of MongoDB&reg;](https://www.mongodb.org)
 Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB(R) is run and maintained by MongoDB, which is a completely separate project from Bitnami.
 
 ## TL;DR
@@ -13,30 +13,39 @@ Disclaimer: The respective trademarks mentioned in the offering are owned by the
 docker run --name mongodb bitnami/mongodb:latest
 ```
 
-## Why use Bitnami Images?
+## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
 
-* Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
-* With Bitnami images the latest bug fixes and features are available as soon as possible.
-* Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [**minideb**](https://github.com/bitnami/minideb) -a minimalist Debian based container image that gives you a small base container image and the familiarity of a leading Linux distribution- or **scratch** -an explicitly empty image-.
-* All Bitnami images available in Docker Hub are signed with [Notation](https://notaryproject.dev/). [Check this post](https://blog.bitnami.com/2024/03/bitnami-packaged-containers-and-helm.html) to know how to verify the integrity of the images.
-* Bitnami container images are released on a regular basis with the latest distribution packages available.
+Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
 
-Looking to use MongoDB&reg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+- Granting community users access for the first time to security-optimized versions of popular container images.
+- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
+## Why use Bitnami Secure Images?
+
+- Bitnami Secure Images and Helm charts are built to make open source more secure and enterprise ready.
+- Triage security vulnerabilities faster, with transparency into CVE risks using industry standard Vulnerability Exploitability Exchange (VEX), KEV, and EPSS scores.
+- Our hardened images use a minimal OS (Photon Linux), which reduces the attack surface while maintaining extensibility through the use of an industry standard package format.
+- Stay more secure and compliant with continuously built images updated within hours of upstream patches.
+- Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
+- Hardened images come with attestation signatures (Notation), SBOMs, virus scan reports and other metadata produced in an SLSA-3 compliant software factory.
+
+Only a subset of BSI applications are available for free. Looking to access the entire catalog of applications as well as enterprise support? Try the [commercial edition of Bitnami Secure Images today](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/).
 
 ## How to deploy MongoDB&reg; in Kubernetes?
 
 Deploying Bitnami applications as Helm Charts is the easiest way to get started with our applications on Kubernetes. Read more about the installation in the [Bitnami MongoDB&reg; Chart GitHub repository](https://github.com/bitnami/charts/tree/master/bitnami/mongodb).
 
-Bitnami containers can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Why use a non-root container?
 
-Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-work-with-non-root-containers-index.html).
+Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-work-with-non-root-containers-index.html).
 
 ## Supported tags and respective `Dockerfile` links
 
-Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html).
+Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html).
 
 You can see the equivalence between the different tags by taking a look at the `tags-info.yaml` file present in the branch folder, i.e `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`.
 
@@ -84,7 +93,7 @@ or by modifying the [`docker-compose.yml`](https://github.com/bitnami/containers
    mongodb:
      ...
      volumes:
--      - 'mongodb_data:/bitnami/mongodb'
+-      - mongodb_data:/bitnami/mongodb
 +      - /path/to/mongodb-persistence:/bitnami/mongodb
    ...
 ```
@@ -140,11 +149,11 @@ networks:
 
 services:
   mongodb:
-    image: 'bitnami/mongodb:latest'
+    image: bitnami/mongodb:latest
     networks:
       - app-tier
   myapp:
-    image: 'YOUR_APPLICATION_IMAGE'
+    image: YOUR_APPLICATION_IMAGE
     networks:
       - app-tier
 ```
@@ -250,8 +259,8 @@ In order to have your custom files inside the docker image you can mount them as
 
 Passing extra command-line flags to the mongod service command is possible through the following env var:
 
-* `MONGODB_EXTRA_FLAGS`: Flags to be appended to the `mongod` startup command. No defaults
-* `MONGODB_CLIENT_EXTRA_FLAGS`: Flags to be appended to the `mongo` command which is used to connect to the (local or remote) `mongod` daemon. No defaults
+- `MONGODB_EXTRA_FLAGS`: Flags to be appended to the `mongod` startup command. No defaults
+- `MONGODB_CLIENT_EXTRA_FLAGS`: Flags to be appended to the `mongo` command which is used to connect to the (local or remote) `mongod` daemon. No defaults
 
 ```console
 docker run --name mongodb -e ALLOW_EMPTY_PASSWORD=yes -e MONGODB_EXTRA_FLAGS='--wiredTigerCacheSizeGB=2' bitnami/mongodb:latest
@@ -273,8 +282,8 @@ services:
 
 Configuring the system log verbosity level is possible through the following env vars:
 
-* `MONGODB_DISABLE_SYSTEM_LOG`: Whether to enable/disable system log on MongoDB&reg;. Default: `false`. Possible values: `[true, false]`.
-* `MONGODB_SYSTEM_LOG_VERBOSITY`: MongoDB&reg; system log verbosity level. Default: `0`. Possible values: `[0, 1, 2, 3, 4, 5]`. For more information about the verbosity levels please refer to the [MongoDB&reg; documentation](https://docs.mongodb.com/manual/reference/configuration-options/#systemLog.verbosity)
+- `MONGODB_DISABLE_SYSTEM_LOG`: Whether to enable/disable system log on MongoDB&reg;. Default: `false`. Possible values: `[true, false]`.
+- `MONGODB_SYSTEM_LOG_VERBOSITY`: MongoDB&reg; system log verbosity level. Default: `0`. Possible values: `[0, 1, 2, 3, 4, 5]`. For more information about the verbosity levels please refer to the [MongoDB&reg; documentation](https://docs.mongodb.com/manual/reference/configuration-options/#systemLog.verbosity)
 
 ```console
 docker run --name mongodb -e ALLOW_EMPTY_PASSWORD=yes -e MONGODB_SYSTEM_LOG_VERBOSITY='3' bitnami/mongodb:latest
@@ -300,7 +309,7 @@ services:
 
 Enabling/disabling IPv6 is possible through the following env var:
 
-* `MONGODB_ENABLE_IPV6`: Whether to enable/disable IPv6 on MongoDB&reg;. Default: `false`. Possible values: `[true, false]`
+- `MONGODB_ENABLE_IPV6`: Whether to enable/disable IPv6 on MongoDB&reg;. Default: `false`. Possible values: `[true, false]`
 
 To enable IPv6 support, you can execute:
 
@@ -324,7 +333,7 @@ services:
 
 Enabling/disabling [directoryPerDB](https://docs.mongodb.com/manual/reference/configuration-options/#storage.directoryPerDB) is possible through the following env var:
 
-* `MONGODB_ENABLE_DIRECTORY_PER_DB`: Whether to enable/disable directoryPerDB on MongoDB&reg;. Default: `true`. Possible values: `[true, false]`
+- `MONGODB_ENABLE_DIRECTORY_PER_DB`: Whether to enable/disable directoryPerDB on MongoDB&reg;. Default: `true`. Possible values: `[true, false]`
 
 ```console
 docker run --name mongodb -e ALLOW_EMPTY_PASSWORD=yes -e MONGODB_ENABLE_DIRECTORY_PER_DB=yes bitnami/mongodb:latest
@@ -346,7 +355,7 @@ services:
 
 Enabling/disabling [journal](https://docs.mongodb.com/manual/reference/configuration-options/#mongodb-setting-storage.journal.enabled) is possible through the following env var:
 
-* `MONGODB_ENABLE_JOURNAL`: Whether to enable/disable journaling on MongoDB&reg;. Default: `true`. Possible values: `[true, false]`
+- `MONGODB_ENABLE_JOURNAL`: Whether to enable/disable journaling on MongoDB&reg;. Default: `true`. Possible values: `[true, false]`
 
 ```console
 docker run --name mongodb -e ALLOW_EMPTY_PASSWORD=yes -e MONGODB_ENABLE_JOURNAL=true bitnami/mongodb:latest
@@ -416,18 +425,18 @@ Creation of a user enables authentication on the MongoDB&reg; server and as a re
 
 A [replication](https://docs.mongodb.com/manual/replication/) cluster can easily be setup with the Bitnami MongoDB&reg; Docker Image using the following environment variables:
 
-* `MONGODB_REPLICA_SET_MODE`: The replication mode. Possible values `primary`/`secondary`/`arbiter`. No defaults.
-* `MONGODB_REPLICA_SET_NAME`: MongoDB&reg; replica set name. Default: **replicaset**
-* `MONGODB_PORT_NUMBER`: The port each MongoDB&reg; will use. Default: **27017**
-* `MONGODB_INITIAL_PRIMARY_HOST`: MongoDB&reg; initial primary host, once the replicaset is created any node can be eventually promoted to be the primary. No defaults.
-* `MONGODB_INITIAL_PRIMARY_PORT_NUMBER`: MongoDB&reg; initial primary node port, as seen by other nodes. Default: **27017**
-* `MONGODB_ADVERTISED_HOSTNAME`: MongoDB&reg; advertised hostname. No defaults. It is recommended to pass this environment variable if you experience issues with ephemeral IPs. Setting this env var makes the nodes of the replica set to be configured with a hostname instead of the machine IP.
-* `MONGODB_ADVERTISE_IP`: MongoDB&reg; advertised hostname is set to container ip. Default: **false**. Overrides `MONGODB_ADVERTISED_HOSTNAME`
-* `MONGODB_ADVERTISED_PORT_NUMBER`: MongoDB&reg; advertised port number. No defaults. It is recommended to pass this environment variable if you have a proxy port forwarding requests to container.
-* `MONGODB_REPLICA_SET_KEY`: MongoDB&reg; replica set key. Length should be greater than 5 characters and should not contain any special characters. Required for all nodes. No default.
-* `MONGODB_ROOT_USER`: MongoDB&reg; root user name. Default: **root**.
-* `MONGODB_ROOT_PASSWORD`: MongoDB&reg; root password. No defaults. Only for primary node.
-* `MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD`: MongoDB&reg; initial primary root password. No defaults. Only for secondaries and arbiter nodes.
+- `MONGODB_REPLICA_SET_MODE`: The replication mode. Possible values `primary`/`secondary`/`arbiter`. No defaults.
+- `MONGODB_REPLICA_SET_NAME`: MongoDB&reg; replica set name. Default: **replicaset**
+- `MONGODB_PORT_NUMBER`: The port each MongoDB&reg; will use. Default: **27017**
+- `MONGODB_INITIAL_PRIMARY_HOST`: MongoDB&reg; initial primary host, once the replicaset is created any node can be eventually promoted to be the primary. No defaults.
+- `MONGODB_INITIAL_PRIMARY_PORT_NUMBER`: MongoDB&reg; initial primary node port, as seen by other nodes. Default: **27017**
+- `MONGODB_ADVERTISED_HOSTNAME`: MongoDB&reg; advertised hostname. No defaults. It is recommended to pass this environment variable if you experience issues with ephemeral IPs. Setting this env var makes the nodes of the replica set to be configured with a hostname instead of the machine IP.
+- `MONGODB_ADVERTISE_IP`: MongoDB&reg; advertised hostname is set to container ip. Default: **false**. Overrides `MONGODB_ADVERTISED_HOSTNAME`
+- `MONGODB_ADVERTISED_PORT_NUMBER`: MongoDB&reg; advertised port number. No defaults. It is recommended to pass this environment variable if you have a proxy port forwarding requests to container.
+- `MONGODB_REPLICA_SET_KEY`: MongoDB&reg; replica set key. Length should be greater than 5 characters and should not contain any special characters. Required for all nodes. No default.
+- `MONGODB_ROOT_USER`: MongoDB&reg; root user name. Default: **root**.
+- `MONGODB_ROOT_PASSWORD`: MongoDB&reg; root password. No defaults. Only for primary node.
+- `MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD`: MongoDB&reg; initial primary root password. No defaults. Only for secondaries and arbiter nodes.
 
 In a replication cluster you can have one primary node, zero or more secondary nodes and zero or one arbiter node.
 
@@ -511,7 +520,7 @@ version: '2'
 
 services:
   mongodb-primary:
-    image: 'bitnami/mongodb:latest'
+    image: bitnami/mongodb:latest
     environment:
       - MONGODB_ADVERTISED_HOSTNAME=mongodb-primary
       - MONGODB_REPLICA_SET_MODE=primary
@@ -519,10 +528,10 @@ services:
       - MONGODB_REPLICA_SET_KEY=replicasetkey123
 
     volumes:
-      - 'mongodb_master_data:/bitnami'
+      - mongodb_master_data:/bitnami
 
   mongodb-secondary:
-    image: 'bitnami/mongodb:latest'
+    image: bitnami/mongodb:latest
     depends_on:
       - mongodb-primary
     environment:
@@ -534,7 +543,7 @@ services:
       - MONGODB_REPLICA_SET_KEY=replicasetkey123
 
   mongodb-arbiter:
-    image: 'bitnami/mongodb:latest'
+    image: bitnami/mongodb:latest
     depends_on:
       - mongodb-primary
     environment:
@@ -563,7 +572,7 @@ version: '2'
 
 services:
   mongodb-primary:
-    image: 'bitnami/mongodb:latest'
+    image: bitnami/mongodb:latest
     environment:
       - MONGODB_ADVERTISED_HOSTNAME=mongodb-primary
       - MONGODB_REPLICA_SET_MODE=primary
@@ -571,10 +580,10 @@ services:
       - MONGODB_REPLICA_SET_KEY=replicasetkey123
 
     volumes:
-      - 'mongodb_master_data:/bitnami'
+      - mongodb_master_data:/bitnami
 
   mongodb-secondary:
-    image: 'bitnami/mongodb:latest'
+    image: bitnami/mongodb:latest
     depends_on:
       - mongodb-primary
     environment:
@@ -585,7 +594,7 @@ services:
       - MONGODB_REPLICA_SET_KEY=replicasetkey123
 
   mongodb-arbiter:
-    image: 'bitnami/mongodb:latest'
+    image: bitnami/mongodb:latest
     depends_on:
       - mongodb-primary
     environment:
@@ -652,13 +661,13 @@ Another option would be to use letsencrypt certificates; the required configurat
 
 #### Generating self-signed certificates
 
-* Generate a new private key which will be used to create your own Certificate Authority (CA):
+- Generate a new private key which will be used to create your own Certificate Authority (CA):
 
 ```console
 openssl genrsa -out mongoCA.key 2048
 ```
 
-* Create the public certificate for your own CA:
+- Create the public certificate for your own CA:
 
 ```console
 openssl req -x509 -new \
@@ -666,7 +675,7 @@ openssl req -x509 -new \
     -key mongoCA.key -out mongoCA.crt
 ```
 
-* Create a Certificate Signing Request for a node `${NODE_NAME}`, the essential part here is that the `Common Name` corresponds to the hostname by which the nodes will be addressed.
+- Create a Certificate Signing Request for a node `${NODE_NAME}`, the essential part here is that the `Common Name` corresponds to the hostname by which the nodes will be addressed.
 Example for `mongodb-primary`:
 
 ```console
@@ -676,7 +685,7 @@ openssl req -new -nodes \
     -keyout ${NODE_NAME}.key -out ${NODE_NAME}.csr
 ```
 
-* Create a certificate from the Certificate Signing Request and sign it using the private key of your previously created Certificate Authority:
+- Create a certificate from the Certificate Signing Request and sign it using the private key of your previously created Certificate Authority:
 
 ```console
 openssl x509 \
@@ -684,7 +693,7 @@ openssl x509 \
     -CA mongoCA.crt -CAkey mongoCA.key -CAcreateserial -extensions req
 ```
 
-* Create a PEM bundle using the private key and the public certificate:
+- Create a PEM bundle using the private key and the public certificate:
 
 ```console
 cat ${NODE_NAME}.key ${NODE_NAME}.crt > ${NODE_NAME}.pem
@@ -704,15 +713,15 @@ After having generated the certificates and making them available to the contain
 
 Example settings for the primary node `mongodb-primary`:
 
-* `MONGODB_ADVERTISED_HOSTNAME=mongodb-primary`
-* `MONGODB_EXTRA_FLAGS=--tlsMode=requireTLS --tlsCertificateKeyFile=/certificates/mongodb-primary.pem --tlsClusterFile=/certificates/mongodb-primary.pem --tlsCAFile=/certificates/mongoCA.crt`
-* `MONGODB_CLIENT_EXTRA_FLAGS=--tls --tlsCertificateKeyFile=/certificates/mongodb-primary.pem --tlsCAFile=/certificates/mongoCA.crt`
+- `MONGODB_ADVERTISED_HOSTNAME=mongodb-primary`
+- `MONGODB_EXTRA_FLAGS=--tlsMode=requireTLS --tlsCertificateKeyFile=/certificates/mongodb-primary.pem --tlsClusterFile=/certificates/mongodb-primary.pem --tlsCAFile=/certificates/mongoCA.crt`
+- `MONGODB_CLIENT_EXTRA_FLAGS=--tls --tlsCertificateKeyFile=/certificates/mongodb-primary.pem --tlsCAFile=/certificates/mongoCA.crt`
 
 Example corresponding settings for a secondary node `mongodb-secondary`:
 
-* `MONGODB_ADVERTISED_HOSTNAME=mongodb-secondary`
-* `MONGODB_EXTRA_FLAGS=--tlsMode=requireTLS --tlsCertificateKeyFile=/certificates/mongodb-secondary.pem --tlsClusterFile=/certificates/mongodb-secondary.pem --tlsCAFile=/certificates/mongoCA.crt`
-* `MONGODB_CLIENT_EXTRA_FLAGS=--tls --tlsCertificateKeyFile=/certificates/mongodb-secondary.pem --tlsCAFile=/certificates/mongoCA.crt`
+- `MONGODB_ADVERTISED_HOSTNAME=mongodb-secondary`
+- `MONGODB_EXTRA_FLAGS=--tlsMode=requireTLS --tlsCertificateKeyFile=/certificates/mongodb-secondary.pem --tlsClusterFile=/certificates/mongodb-secondary.pem --tlsCAFile=/certificates/mongoCA.crt`
+- `MONGODB_CLIENT_EXTRA_FLAGS=--tls --tlsCertificateKeyFile=/certificates/mongodb-secondary.pem --tlsCAFile=/certificates/mongoCA.crt`
 
 #### Connecting to the mongo daemon via SSL
 
@@ -726,9 +735,9 @@ After successfully starting a cluster as specified, within the container it shou
 
 #### References
 
-* To also allow clients to connect using username and password (without X509 certificates): <https://docs.mongodb.com/manual/reference/configuration-options/#net.ssl.allowConnectionsWithoutCertificates>
+- To also allow clients to connect using username and password (without X509 certificates): <https://docs.mongodb.com/manual/reference/configuration-options/#net.ssl.allowConnectionsWithoutCertificates>
 
-* For more extensive information regarding related configuration options: <https://docs.mongodb.com/manual/reference/program/mongod/#tls-ssl-options>,
+- For more extensive information regarding related configuration options: <https://docs.mongodb.com/manual/reference/program/mongod/#tls-ssl-options>,
 Especially client authentication and requirements for common name and OU/DN/etc. fields in the certificates are important for creating a secure setup.
 
 ### Configuration file
@@ -751,7 +760,7 @@ or using Docker Compose:
    mongodb:
      ...
      volumes:
-       - 'mongodb_data:/bitnami/mongodb'
+       - mongodb_data:/bitnami/mongodb
 +      - /path/to/mongodb-configuration-persistence:/bitnami/mongodb/conf
    ...
 ```
@@ -862,36 +871,36 @@ docker-compose up mongodb
 
 ### 4.4.8-debian-10-r31, and 5.0.2-debian-10-r0
 
-* From now on, "Default Write Concern" need to be set before adding new members (secondary, arbiter or hidden) to the cluster. In order to maintain the safest default configuration, `{"setDefaultRWConcern" : 1, "defaultWriteConcern" : {"w" : "majority"}}` is configured before adding new members. See <https://docs.mongodb.com/manual/reference/command/setDefaultRWConcern/> and <https://docs.mongodb.com/v5.0/reference/mongodb-defaults/#default-write-concern>
+- From now on, "Default Write Concern" need to be set before adding new members (secondary, arbiter or hidden) to the cluster. In order to maintain the safest default configuration, `{"setDefaultRWConcern" : 1, "defaultWriteConcern" : {"w" : "majority"}}` is configured before adding new members. See <https://docs.mongodb.com/manual/reference/command/setDefaultRWConcern/> and <https://docs.mongodb.com/v5.0/reference/mongodb-defaults/#default-write-concern>
 
 ### 3.6.14-r69, 4.0.13-r11, and 4.2.1-r12
 
-* The configuration files mount point changed from `/opt/bitnami/mongodb/conf` to `/bitnami/mongodb/conf`.
+- The configuration files mount point changed from `/opt/bitnami/mongodb/conf` to `/bitnami/mongodb/conf`.
 
 ### 3.6.13-r33, 4.0.10-r42, 4.1.13-r40 and 4.1.13-r41
 
-* `MONGODB_ENABLE_IPV6` set to `false` by default, if you want to enable IPv6, you need to set this environment variable to `true`. You can find more info at the above ["Enabling/disabling IPv6"](#enablingdisabling-ipv6) section.
+- `MONGODB_ENABLE_IPV6` set to `false` by default, if you want to enable IPv6, you need to set this environment variable to `true`. You can find more info at the above ["Enabling/disabling IPv6"](#enablingdisabling-ipv6) section.
 
 ### 3.6.13-debian-9-r15, 3.6.13-ol-7-r15, 4.0.10-debian-9-r23, 4.0.10-ol-7-r24, 4.1.13-debian-9-r22, 4.1.13-ol-7-r23 or later
 
-* Decrease the size of the container. Node.js is not needed anymore. MongoDB&reg; configuration logic has been moved to bash scripts in the rootfs folder.
+- Decrease the size of the container. Node.js is not needed anymore. MongoDB&reg; configuration logic has been moved to bash scripts in the rootfs folder.
 
 ### 3.6.9, 4.0.4 and 4.1.5 or later
 
-* All MongoDB&reg; versions released after October 16, 2018 (3.6.9 or later, 4.0.4 or later or 4.1.5 or later) are licensed under the [Server Side Public License](https://www.mongodb.com/licensing/server-side-public-license) that is not currently accepted as a Open Source license by the Open Source Iniciative (OSI).
+- All MongoDB&reg; versions released after October 16, 2018 (3.6.9 or later, 4.0.4 or later or 4.1.5 or later) are licensed under the [Server Side Public License](https://www.mongodb.com/licensing/server-side-public-license) that is not currently accepted as a Open Source license by the Open Source Iniciative (OSI).
 
 ### 3.6.6-r16 and 4.1.1-r9
 
-* The MongoDB&reg; container has been migrated to a non-root user approach. Previously the container ran as the `root` user and the MongoDB&reg; daemon was started as the `mongo` user. From now on, both the container and the MongoDB&reg; daemon run as user `1001`. As a consequence, the data directory must be writable by that user. You can revert this behavior by changing `USER 1001` to `USER root` in the Dockerfile.
+- The MongoDB&reg; container has been migrated to a non-root user approach. Previously the container ran as the `root` user and the MongoDB&reg; daemon was started as the `mongo` user. From now on, both the container and the MongoDB&reg; daemon run as user `1001`. As a consequence, the data directory must be writable by that user. You can revert this behavior by changing `USER 1001` to `USER root` in the Dockerfile.
 
 ### 3.2.7-r5
 
-* `MONGODB_USER` parameter has been renamed to `MONGODB_USERNAME`.
+- `MONGODB_USER` parameter has been renamed to `MONGODB_USERNAME`.
 
 ### 3.2.6-r0
 
-* All volumes have been merged at `/bitnami/mongodb`. Now you only need to mount a single volume at `/bitnami/mongodb` for persistence.
-* The logs are always sent to the `stdout` and are no longer collected in the volume.
+- All volumes have been merged at `/bitnami/mongodb`. Now you only need to mount a single volume at `/bitnami/mongodb` for persistence.
+- The logs are always sent to the `stdout` and are no longer collected in the volume.
 
 ## Using `docker-compose.yaml`
 
@@ -909,7 +918,7 @@ If you encountered a problem running this container, you can file an [issue](htt
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -4,7 +4,7 @@
 
 > Discourse is an open source discussion platform with built-in moderation and governance systems that let discussion communities protect themselves from bad actors even without official moderators.
 
-[Overview of Discourse&reg;](http://www.discourse.org/)
+[Overview of Discourse&reg;](https://www.discourse.org/)
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
 ## TL;DR
@@ -16,20 +16,31 @@ docker run --name discourse bitnami/discourse:latest
 **Warning**: This quick setup is only intended for development environments. You are encouraged to change the insecure default credentials and check out the available configuration options in the [Environment Variables](#environment-variables) section for a more secure d
 eployment.
 
-## Why use Bitnami Images?
+## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
 
-* Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
-* With Bitnami images the latest bug fixes and features are available as soon as possible.
-* Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [**minideb**](https://github.com/bitnami/minideb) -a minimalist Debian based container image that gives you a small base container image and the familiarity of a leading Linux distribution- or **scratch** -an explicitly empty image-.
-* All Bitnami images available in Docker Hub are signed with [Notation](https://notaryproject.dev/). [Check this post](https://blog.bitnami.com/2024/03/bitnami-packaged-containers-and-helm.html) to know how to verify the integrity of the images.
-* Bitnami container images are released on a regular basis with the latest distribution packages available.
+Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
 
-Looking to use Discourse&reg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+- Granting community users access for the first time to security-optimized versions of popular container images.
+- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
+## Why use Bitnami Secure Images?
+
+- Bitnami Secure Images and Helm charts are built to make open source more secure and enterprise ready.
+- Triage security vulnerabilities faster, with transparency into CVE risks using industry standard Vulnerability Exploitability Exchange (VEX), KEV, and EPSS scores.
+- Our hardened images use a minimal OS (Photon Linux), which reduces the attack surface while maintaining extensibility through the use of an industry standard package format.
+- Stay more secure and compliant with continuously built images updated within hours of upstream patches.
+- Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
+- Hardened images come with attestation signatures (Notation), SBOMs, virus scan reports and other metadata produced in an SLSA-3 compliant software factory.
+
+Only a subset of BSI applications are available for free. Looking to access the entire catalog of applications as well as enterprise support? Try the [commercial edition of Bitnami Secure Images today](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/).
 
 ## Supported tags and respective `Dockerfile` links
 
-Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html).
+Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html).
 
 You can see the equivalence between the different tags by taking a look at the `tags-info.yaml` file present in the branch folder, i.e `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`.
 
@@ -159,25 +170,25 @@ This requires a minor change to the [`docker-compose.yml`](https://github.com/bi
    postgresql:
      ...
      volumes:
--      - 'postgresql_data:/bitnami/postgresql'
+-      - postgresql_data:/bitnami/postgresql
 +      - /path/to/postgresql-persistence:/bitnami/postgresql
    ...
    redis:
      ...
      volumes:
--      - 'redis_data:/bitnami/redis'
+-      - redis_data:/bitnami/redis
 +      - /path/to/redis-persistence:/bitnami/redis
    ...
    discourse:
      ...
      volumes:
--      - 'discourse_data:/bitnami/discourse'
+-      - discourse_data:/bitnami/discourse
 +      - /path/to/discourse-persistence:/bitnami/discourse
    ...
    sidekiq:
      ...
      volumes:
--      - 'discourse_data:/bitnami/discourse'
+-      - discourse_data:/bitnami/discourse
 +      - /path/to/discourse-persistence:/bitnami/discourse
    ...
 -volumes:
@@ -250,9 +261,9 @@ docker run -d --name sidekiq \
 
 You can mount your configuration files to the `/opt/bitnami/discourse/mounted-conf` directory. Make sure that your configuration files follow the standardized names used by Discourse. Some of the most common files include:
 
-* `discourse.conf`
-* `database.yml`
-* `site_settings.yml`
+- `discourse.conf`
+- `database.yml`
+- `site_settings.yml`
 
 The set of default standard configuration files may be found [here](https://github.com/discourse/discourse/tree/master/config). You may refer to the the Discourse [webpage](https://www.discourse.org/) for further details and specific configuration guides.
 
@@ -300,6 +311,7 @@ The set of default standard configuration files may be found [here](https://gith
 | `DISCOURSE_REDIS_PORT_NUMBER`          | Redis(R) server port.                                                                                                           | `6379`                                  |
 | `DISCOURSE_REDIS_PASSWORD`             | Redis(R) user password.                                                                                                         | `nil`                                   |
 | `DISCOURSE_REDIS_USE_SSL`              | Whether to enable SSL for Redis(R).                                                                                             | `no`                                    |
+| `DISCOURSE_REDIS_DB`                   | Redis(R) database number.                                                                                                       | `0`                                     |
 
 #### Read-only environment variables
 
@@ -316,7 +328,7 @@ The set of default standard configuration files may be found [here](https://gith
 
 When you start the Discourse image, you can adjust the configuration of the instance by passing one or more environment variables either on the docker-compose file or on the `docker run` command line. If you want to add a new environment variable:
 
-* For docker-compose add the variable name and value under the application section in the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/discourse/docker-compose.yml) file present in this repository:
+- For docker-compose add the variable name and value under the application section in the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/discourse/docker-compose.yml) file present in this repository:
 
     ```yaml
     discourse:
@@ -326,7 +338,7 @@ When you start the Discourse image, you can adjust the configuration of the inst
       ...
     ```
 
-* For manual execution add a `--env` option with each variable and value:
+- For manual execution add a `--env` option with each variable and value:
 
     ```console
     $ docker run -d --name discourse -p 80:8080 -p 443:8443 \
@@ -342,7 +354,7 @@ When you start the Discourse image, you can adjust the configuration of the inst
 
 This would be an example of SMTP configuration using a Gmail account:
 
-* Modify the environment variables used for the `discourse` and `sidekiq` containers in the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/discourse/docker-compose.yml) file present in this repository:
+- Modify the environment variables used for the `discourse` and `sidekiq` containers in the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/discourse/docker-compose.yml) file present in this repository:
 
     ```yaml
       discourse:
@@ -367,9 +379,9 @@ This would be an example of SMTP configuration using a Gmail account:
       ...
     ```
 
-* For manual execution:
+- For manual execution:
 
-  * First, create the Discourse container:
+  - First, create the Discourse container:
 
     ```console
     $ docker run -d --name discourse -p 80:8080 -p 443:8443 \
@@ -385,7 +397,7 @@ This would be an example of SMTP configuration using a Gmail account:
       bitnami/discourse:latest
     ```
 
-  * Then, create the Sidekiq container:
+  - Then, create the Sidekiq container:
 
     ```console
     $ docker run -d --name sidekiq \
@@ -415,7 +427,7 @@ See the [documentation on troubleshooting SMTP issues](https://docs.bitnami.com/
 
 The Bitnami Discourse container supports connecting the Discourse application to an external database. This would be an example of using an external database for Discourse.
 
-* Modify the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/discourse/docker-compose.yml) file present in this repository:
+- Modify the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/discourse/docker-compose.yml) file present in this repository:
 
     ```diff
        discourse:
@@ -431,7 +443,7 @@ The Bitnami Discourse container supports connecting the Discourse application to
          ...
     ```
 
-* For manual execution:
+- For manual execution:
 
     ```console
     $ docker run -d --name discourse\
@@ -559,20 +571,20 @@ docker-compose up -d
 
 ### 2.7.0-debian-10-r4
 
-* The size of the container image has been decreased.
-* The configuration logic is now based on Bash scripts in the *rootfs/* folder.
+- The size of the container image has been decreased.
+- The configuration logic is now based on Bash scripts in the *rootfs/* folder.
 
 ### 2.4.4-debian-10-r8 release
 
-* Discourse and Sidekiq now make use of the same volume to persist data. This solves issues related to being unable to locate some files generated on-demand by the Sidekiq job scheduler.
+- Discourse and Sidekiq now make use of the same volume to persist data. This solves issues related to being unable to locate some files generated on-demand by the Sidekiq job scheduler.
 
 ### 2.3.2-debian-9-r48 and 2.3.2-ol-7-r47
 
-* The Discourse container now uses Passenger's ['direct' process spawning method](https://www.phusionpassenger.com/docs/advanced_guides/in_depth/ruby/spawn_methods.html) (instead of the default 'smart'), which fixes a bug where settings would randomly revert back to the original values. This setting may cause an increase in memory usage. It is possible to configure the spawning method by setting the `DISCOURSE_PASSENGER_SPAWN_METHOD` environment variable.
+- The Discourse container now uses Passenger's ['direct' process spawning method](https://www.phusionpassenger.com/docs/advanced_guides/in_depth/ruby/spawn_methods.html) (instead of the default 'smart'), which fixes a bug where settings would randomly revert back to the original values. This setting may cause an increase in memory usage. It is possible to configure the spawning method by setting the `DISCOURSE_PASSENGER_SPAWN_METHOD` environment variable.
 
 ### 2.2.5-debian-9-r9 and 2.2.5-ol-7-r8
 
-* It is now possible to import existing Discourse databases from other installations. In order to do this, use the environment variable `DISCOURSE_SKIP_INSTALL`, which forces the container not to run the initial Discourse setup wizard.
+- It is now possible to import existing Discourse databases from other installations. In order to do this, use the environment variable `DISCOURSE_SKIP_INSTALL`, which forces the container not to run the initial Discourse setup wizard.
 
 ## Contributing
 
@@ -584,7 +596,7 @@ If you encountered a problem running this container, you can file an [issue](htt
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

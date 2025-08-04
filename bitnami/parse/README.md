@@ -4,7 +4,7 @@
 
 > Parse is a platform that enables users to add a scalable and powerful backend to launch a full-featured app for iOS, Android, JavaScript, Windows, Unity, and more.
 
-[Overview of Parse Server](http://parseplatform.org/)
+[Overview of Parse Server](https://parseplatform.org/)
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
 ## TL;DR
@@ -15,30 +15,39 @@ docker run --name parse bitnami/parse:latest
 
 You can find the default credentials and available configuration options in the [Environment Variables](#environment-variables) section.
 
-## Why use Bitnami Images?
+## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
 
-* Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
-* With Bitnami images the latest bug fixes and features are available as soon as possible.
-* Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [**minideb**](https://github.com/bitnami/minideb) -a minimalist Debian based container image that gives you a small base container image and the familiarity of a leading Linux distribution- or **scratch** -an explicitly empty image-.
-* All Bitnami images available in Docker Hub are signed with [Notation](https://notaryproject.dev/). [Check this post](https://blog.bitnami.com/2024/03/bitnami-packaged-containers-and-helm.html) to know how to verify the integrity of the images.
-* Bitnami container images are released on a regular basis with the latest distribution packages available.
+Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
 
-Looking to use Parse Server in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+- Granting community users access for the first time to security-optimized versions of popular container images.
+- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
+## Why use Bitnami Secure Images?
+
+- Bitnami Secure Images and Helm charts are built to make open source more secure and enterprise ready.
+- Triage security vulnerabilities faster, with transparency into CVE risks using industry standard Vulnerability Exploitability Exchange (VEX), KEV, and EPSS scores.
+- Our hardened images use a minimal OS (Photon Linux), which reduces the attack surface while maintaining extensibility through the use of an industry standard package format.
+- Stay more secure and compliant with continuously built images updated within hours of upstream patches.
+- Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
+- Hardened images come with attestation signatures (Notation), SBOMs, virus scan reports and other metadata produced in an SLSA-3 compliant software factory.
+
+Only a subset of BSI applications are available for free. Looking to access the entire catalog of applications as well as enterprise support? Try the [commercial edition of Bitnami Secure Images today](https://www.arrow.com/globalecs/uk/products/bitnami-secure-images/).
 
 ## How to deploy Parse Server in Kubernetes?
 
 Deploying Bitnami applications as Helm Charts is the easiest way to get started with our applications on Kubernetes. Read more about the installation in the [Bitnami Parse Server Chart GitHub repository](https://github.com/bitnami/charts/tree/master/bitnami/parse).
 
-Bitnami containers can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Why use a non-root container?
 
-Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-work-with-non-root-containers-index.html).
+Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-work-with-non-root-containers-index.html).
 
 ## Supported tags and respective `Dockerfile` links
 
-Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html).
+Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html).
 
 You can see the equivalence between the different tags by taking a look at the `tags-info.yaml` file present in the branch folder, i.e `bitnami/ASSET/BRANCH/DISTRO/tags-info.yaml`.
 
@@ -111,12 +120,12 @@ This requires a minor change to the [`docker-compose.yml`](https://github.com/bi
   mongodb:
   ...
     volumes:
-      - '/path/to/your/local/mongodb_data:/bitnami'
+      - /path/to/your/local/mongodb_data:/bitnami
   ...
   parse:
   ...
     volumes:
-      - '/path/to/parse-persistence:/bitnami'
+      - /path/to/parse-persistence:/bitnami
   ...
 ```
 
@@ -162,8 +171,8 @@ Bitnami provides up-to-date versions of Mongodb and Parse, including security pa
 
 2. Stop your container
 
-    * For docker-compose: `$ docker-compose stop parse`
-    * For manual execution: `$ docker stop parse`
+    - For docker-compose: `$ docker-compose stop parse`
+    - For manual execution: `$ docker stop parse`
 
 3. Take a snapshot of the application state
 
@@ -177,13 +186,13 @@ Bitnami provides up-to-date versions of Mongodb and Parse, including security pa
 
 4. Remove the currently running container
 
-    * For docker-compose: `$ docker-compose rm parse`
-    * For manual execution: `$ docker rm parse`
+    - For docker-compose: `$ docker-compose rm parse`
+    - For manual execution: `$ docker rm parse`
 
 5. Run the new image
 
-    * For docker-compose: `$ docker-compose up parse`
-    * For manual execution (mount the directories if needed): `docker run --name parse bitnami/parse:latest`
+    - For docker-compose: `$ docker-compose up parse`
+    - For manual execution (mount the directories if needed): `docker run --name parse bitnami/parse:latest`
 
 ## Configuration
 
@@ -226,7 +235,7 @@ Bitnami provides up-to-date versions of Mongodb and Parse, including security pa
 
 When you start the parse image, you can adjust the configuration of the instance by passing one or more environment variables either on the docker-compose file or on the `docker run` command line. If you want to add a new environment variable:
 
-* For docker-compose add the variable name and value under the application section in the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/parse/docker-compose.yml) file present in this repository:
+- For docker-compose add the variable name and value under the application section in the [`docker-compose.yml`](https://github.com/bitnami/containers/blob/main/bitnami/parse/docker-compose.yml) file present in this repository:
 
 ```yaml
 parse:
@@ -236,7 +245,7 @@ parse:
   ...
 ```
 
-* For manual execution add a `-e` option with each variable and value:
+- For manual execution add a `-e` option with each variable and value:
 
 ```console
  docker run -d -e PARSE_HOST=my_host -p 1337:1337 --name parse -v /your/local/path/bitnami/parse:/bitnami --network=parse_network bitnami/parse
@@ -246,7 +255,7 @@ parse:
 
 You can use Cloud Code to run a piece of code in your Parse Server instead of the user's mobile devices. To run your Cloud functions using this image, follow the steps below:
 
-* Create a directory on your host machine and put your Cloud functions on it. In the example below, a simple "Hello world!" function is used:
+- Create a directory on your host machine and put your Cloud functions on it. In the example below, a simple "Hello world!" function is used:
 
 ```console
 $ mkdir ~/cloud
@@ -257,7 +266,7 @@ Parse.Cloud.define("sayHelloWorld", function(request, response) {
 EOF
 ```
 
-* Mount the directory as a data volume at the `/opt/bitnami/parse/cloud` path on your Parse Container and set the environment variable `PARSE_ENABLE_CLOUD_CODE` to `yes`. You can use the `docker-compose.yml` below:
+- Mount the directory as a data volume at the `/opt/bitnami/parse/cloud` path on your Parse Container and set the environment variable `PARSE_ENABLE_CLOUD_CODE` to `yes`. You can use the `docker-compose.yml` below:
 
 > NOTE: In the example below, Parse Dashboard is also deployed.
 
@@ -265,26 +274,26 @@ EOF
 version: '2'
 services:
   mongodb:
-    image: 'bitnami/mongodb:latest'
+    image: bitnami/mongodb:latest
     volumes:
-      - 'mongodb_data:/bitnami'
+      - mongodb_data:/bitnami
   parse:
-    image: 'bitnami/parse:latest'
+    image: bitnami/parse:latest
     ports:
-      - '1337:1337'
+      - 1337:1337
     environment:
       - PARSE_ENABLE_CLOUD_CODE=yes
     volumes:
-      - 'parse_data:/bitnami'
-      - '/path/to/home/directory/cloud:/opt/bitnami/parse/cloud'
+      - parse_data:/bitnami
+      - /path/to/home/directory/cloud:/opt/bitnami/parse/cloud
     depends_on:
       - mongodb
   parse-dashboard:
-    image: 'bitnami/parse-dashboard:latest'
+    image: bitnami/parse-dashboard:latest
     ports:
-      - '80:4040'
+      - 80:4040
     volumes:
-      - 'parse_dashboard_data:/bitnami'
+      - parse_dashboard_data:/bitnami
     depends_on:
       - parse
 volumes:
@@ -296,15 +305,15 @@ volumes:
     driver: local
 ```
 
-* Use the `docker-compose` tool to deploy Parse and Parse Dashboard:
+- Use the `docker-compose` tool to deploy Parse and Parse Dashboard:
 
 ```console
 docker-compose up -d
 ```
 
-* Once both Parse and Parse Dashboard are running, access Parse Dashboard and browse to 'My Dashboard -> API Console'.
-* Then, send a 'test query' of type 'POST' using 'functions/sayHelloWorld' as endpoint. Ensure you activate the 'Master Key' parameter.
-* Everything should be working now and you should receive a 'Hello World' message in the results.
+- Once both Parse and Parse Dashboard are running, access Parse Dashboard and browse to 'My Dashboard -> API Console'.
+- Then, send a 'test query' of type 'POST' using 'functions/sayHelloWorld' as endpoint. Ensure you activate the 'Master Key' parameter.
+- Everything should be working now and you should receive a 'Hello World' message in the results.
 
 Find more information about Cloud Code and Cloud functions in the [official documentation](https://docs.parseplatform.org/cloudcode/guide/).
 
@@ -312,16 +321,16 @@ Find more information about Cloud Code and Cloud functions in the [official docu
 
 ### 4.9.3
 
-* This version was released from an incorrect version tag from the upstream Parse repositories. Parse developers have reported issues in some functionalities, though no concerns in regards to privacy, security, or legality were found. As such, we strongly recommend updating this version as soon as possible. You can find more information in [Parse 4.10.0 Release Notes](https://github.com/parse-community/parse-server/releases/tag/4.10.0)
+- This version was released from an incorrect version tag from the upstream Parse repositories. Parse developers have reported issues in some functionalities, though no concerns in regards to privacy, security, or legality were found. As such, we strongly recommend updating this version as soon as possible. You can find more information in [Parse 4.10.0 Release Notes](https://github.com/parse-community/parse-server/releases/tag/4.10.0)
 
 ### 4.9.3-debian-10-r161
 
-* The size of the container image has been decreased.
-* The configuration logic is now based on Bash scripts in the *rootfs/* folder.
+- The size of the container image has been decreased.
+- The configuration logic is now based on Bash scripts in the *rootfs/* folder.
 
 ### 3.1.2-r14
 
-* The Parse container has been migrated to a non-root user approach. Previously the container ran as the `root` user and the Parse daemon was started as the `parse` user. From now on, both the container and the Parse daemon run as user `1001`. As a consequence, the data directory must be writable by that user. You can revert this behavior by changing `USER 1001` to `USER root` in the Dockerfile.
+- The Parse container has been migrated to a non-root user approach. Previously the container ran as the `root` user and the Parse daemon was started as the `parse` user. From now on, both the container and the Parse daemon run as user `1001`. As a consequence, the data directory must be writable by that user. You can revert this behavior by changing `USER 1001` to `USER root` in the Dockerfile.
 
 ## Contributing
 
@@ -333,7 +342,7 @@ If you encountered a problem running this container, you can file an [issue](htt
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
